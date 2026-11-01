@@ -3,859 +3,648 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self'; connect-src https://formspree.io; form-action https://formspree.io; base-uri 'none'">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Yousuf Nihal | Product Security Engineer</title>
     <meta name="description"
-        content="Product Security & Application Security Engineer Portfolio - VAPT, Secure Architecture, Threat Modeling, eWPTX Certified">
-    <title>Yousuf Nihal | Product Security Engineer Portfolio</title>
-    <!-- Google Fonts -->
+        content="Product Security Engineer specialising in offensive security: VAPT, secure architecture and threat modeling across web, API and mobile. eWPTX and CLLMSP certified, CVE-2025-6478 author.">
+    <meta name="theme-color" content="#06080c">
+    <link rel="canonical" href="https://yousufnihal.github.io/">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta property="og:type" content="profile">
+    <meta property="og:title" content="Yousuf Nihal | Product Security Engineer">
+    <meta property="og:description" content="Let me secure your insecurities. Offensive security, secure architecture and threat modeling.">
+    <meta property="og:url" content="https://yousufnihal.github.io/">
+    <meta property="og:image" content="https://yousufnihal.github.io/profile.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Phosphor Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
     <link rel="stylesheet" href="styles.css">
+    <link rel="preload" as="image" href="profile.jpg" fetchpriority="high">
+    <script src="script.js" defer></script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Yousuf Nihal",
+        "jobTitle": "Product Security Engineer",
+        "url": "https://yousufnihal.github.io/",
+        "image": "https://yousufnihal.github.io/profile.jpg",
+        "sameAs": [
+            "https://www.linkedin.com/in/yousuf-nihal-8816121a6/",
+            "https://github.com/yousufnihal",
+            "https://medium.com/@yousufnihal"
+        ]
+    }
+    </script>
 </head>
 
-<body>
-    <!-- Floating Background Orbs for futuristic lighting depth -->
-    <div class="glow-orb orb-cyan"></div>
-    <div class="glow-orb orb-violet"></div>
+<body id="top">
+    <!-- Icons: Phosphor (MIT), inlined so no third-party script is needed -->
+    <svg class="sprite" width="0" height="0" hidden aria-hidden="true"><symbol id="i-shield-check" viewBox="0 0 256 256"><path d="M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z"/></symbol><symbol id="i-briefcase" viewBox="0 0 256 256"><path d="M216,56H176V48a24,24,0,0,0-24-24H104A24,24,0,0,0,80,48v8H40A16,16,0,0,0,24,72V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V72A16,16,0,0,0,216,56ZM96,48a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96ZM216,72v41.61A184,184,0,0,1,128,136a184.07,184.07,0,0,1-88-22.38V72Zm0,128H40V131.64A200.19,200.19,0,0,0,128,152a200.25,200.25,0,0,0,88-20.37V200ZM104,112a8,8,0,0,1,8-8h32a8,8,0,0,1,0,16H112A8,8,0,0,1,104,112Z"/></symbol><symbol id="i-seal-check" viewBox="0 0 256 256"><path d="M225.86,102.82c-3.77-3.94-7.67-8-9.14-11.57-1.36-3.27-1.44-8.69-1.52-13.94-.15-9.76-.31-20.82-8-28.51s-18.75-7.85-28.51-8c-5.25-.08-10.67-.16-13.94-1.52-3.56-1.47-7.63-5.37-11.57-9.14C146.28,23.51,138.44,16,128,16s-18.27,7.51-25.18,14.14c-3.94,3.77-8,7.67-11.57,9.14C88,40.64,82.56,40.72,77.31,40.8c-9.76.15-20.82.31-28.51,8S41,67.55,40.8,77.31c-.08,5.25-.16,10.67-1.52,13.94-1.47,3.56-5.37,7.63-9.14,11.57C23.51,109.72,16,117.56,16,128s7.51,18.27,14.14,25.18c3.77,3.94,7.67,8,9.14,11.57,1.36,3.27,1.44,8.69,1.52,13.94.15,9.76.31,20.82,8,28.51s18.75,7.85,28.51,8c5.25.08,10.67.16,13.94,1.52,3.56,1.47,7.63,5.37,11.57,9.14C109.72,232.49,117.56,240,128,240s18.27-7.51,25.18-14.14c3.94-3.77,8-7.67,11.57-9.14,3.27-1.36,8.69-1.44,13.94-1.52,9.76-.15,20.82-.31,28.51-8s7.85-18.75,8-28.51c.08-5.25.16-10.67,1.52-13.94,1.47-3.56,5.37-7.63,9.14-11.57C232.49,146.28,240,138.44,240,128S232.49,109.73,225.86,102.82Zm-11.55,39.29c-4.79,5-9.75,10.17-12.38,16.52-2.52,6.1-2.63,13.07-2.73,19.82-.1,7-.21,14.33-3.32,17.43s-10.39,3.22-17.43,3.32c-6.75.1-13.72.21-19.82,2.73-6.35,2.63-11.52,7.59-16.52,12.38S132,224,128,224s-9.15-4.92-14.11-9.69-10.17-9.75-16.52-12.38c-6.1-2.52-13.07-2.63-19.82-2.73-7-.1-14.33-.21-17.43-3.32s-3.22-10.39-3.32-17.43c-.1-6.75-.21-13.72-2.73-19.82-2.63-6.35-7.59-11.52-12.38-16.52S32,132,32,128s4.92-9.15,9.69-14.11,9.75-10.17,12.38-16.52c2.52-6.1,2.63-13.07,2.73-19.82.1-7,.21-14.33,3.32-17.43S70.51,56.9,77.55,56.8c6.75-.1,13.72-.21,19.82-2.73,6.35-2.63,11.52-7.59,16.52-12.38S124,32,128,32s9.15,4.92,14.11,9.69,10.17,9.75,16.52,12.38c6.1,2.52,13.07,2.63,19.82,2.73,7,.1,14.33.21,17.43,3.32s3.22,10.39,3.32,17.43c.1,6.75.21,13.72,2.73,19.82,2.63,6.35,7.59,11.52,12.38,16.52S224,124,224,128,219.08,137.15,214.31,142.11ZM173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34Z"/></symbol><symbol id="i-article" viewBox="0 0 256 256"><path d="M216,40H40A16,16,0,0,0,24,56V200a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H40V56H216V200ZM184,96a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,96Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,128Zm0,32a8,8,0,0,1-8,8H80a8,8,0,0,1,0-16h96A8,8,0,0,1,184,160Z"/></symbol><symbol id="i-list" viewBox="0 0 256 256"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/></symbol><symbol id="i-x" viewBox="0 0 256 256"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"/></symbol><symbol id="i-arrow-right" viewBox="0 0 256 256"><path d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></symbol><symbol id="i-code" viewBox="0 0 256 256"><path d="M69.12,94.15,28.5,128l40.62,33.85a8,8,0,1,1-10.24,12.29l-48-40a8,8,0,0,1,0-12.29l48-40a8,8,0,0,1,10.24,12.3Zm176,27.7-48-40a8,8,0,1,0-10.24,12.3L227.5,128l-40.62,33.85a8,8,0,1,0,10.24,12.29l48-40a8,8,0,0,0,0-12.29ZM162.73,32.48a8,8,0,0,0-10.25,4.79l-64,176a8,8,0,0,0,4.79,10.26A8.14,8.14,0,0,0,96,224a8,8,0,0,0,7.52-5.27l64-176A8,8,0,0,0,162.73,32.48Z"/></symbol><symbol id="i-device-mobile" viewBox="0 0 256 256"><path d="M176,16H80A24,24,0,0,0,56,40V216a24,24,0,0,0,24,24h96a24,24,0,0,0,24-24V40A24,24,0,0,0,176,16ZM72,64H184V192H72Zm8-32h96a8,8,0,0,1,8,8v8H72V40A8,8,0,0,1,80,32Zm96,192H80a8,8,0,0,1-8-8v-8H184v8A8,8,0,0,1,176,224Z"/></symbol><symbol id="i-plugs-connected" viewBox="0 0 256 256"><path d="M237.66,18.34a8,8,0,0,0-11.32,0l-52.4,52.41-5.37-5.38a32.05,32.05,0,0,0-45.26,0L100,88.69l-6.34-6.35A8,8,0,0,0,82.34,93.66L88.69,100,65.37,123.31a32,32,0,0,0,0,45.26l5.38,5.37-52.41,52.4a8,8,0,0,0,11.32,11.32l52.4-52.41,5.37,5.38a32,32,0,0,0,45.26,0L156,167.31l6.34,6.35a8,8,0,0,0,11.32-11.32L167.31,156l23.32-23.31a32,32,0,0,0,0-45.26l-5.38-5.37,52.41-52.4A8,8,0,0,0,237.66,18.34Zm-116.29,161a16,16,0,0,1-22.62,0L76.69,157.25a16,16,0,0,1,0-22.62L100,111.31,144.69,156Zm57.94-57.94L156,144.69,111.31,100l23.32-23.31a16,16,0,0,1,22.62,0l22.06,22A16,16,0,0,1,179.31,121.37ZM88.57,35A8,8,0,0,1,103.43,29l8,20A8,8,0,0,1,96.57,55ZM24.57,93A8,8,0,0,1,35,88.57l20,8A8,8,0,0,1,49,111.43l-20-8A8,8,0,0,1,24.57,93ZM231.43,163a8,8,0,0,1-10.4,4.46l-20-8A8,8,0,1,1,207,144.57l20,8A8,8,0,0,1,231.43,163Zm-64,58.06A8,8,0,0,1,152.57,227l-8-20A8,8,0,0,1,159.43,201Z"/></symbol><symbol id="i-brain" viewBox="0 0 256 256"><path d="M248,124a56.11,56.11,0,0,0-32-50.61V72a48,48,0,0,0-88-26.49A48,48,0,0,0,40,72v1.39a56,56,0,0,0,0,101.2V176a48,48,0,0,0,88,26.49A48,48,0,0,0,216,176v-1.41A56.09,56.09,0,0,0,248,124ZM88,208a32,32,0,0,1-31.81-28.56A55.87,55.87,0,0,0,64,180h8a8,8,0,0,0,0-16H64A40,40,0,0,1,50.67,86.27,8,8,0,0,0,56,78.73V72a32,32,0,0,1,64,0v68.26A47.8,47.8,0,0,0,88,128a8,8,0,0,0,0,16,32,32,0,0,1,0,64Zm104-44h-8a8,8,0,0,0,0,16h8a55.87,55.87,0,0,0,7.81-.56A32,32,0,1,1,168,144a8,8,0,0,0,0-16,47.8,47.8,0,0,0-32,12.26V72a32,32,0,0,1,64,0v6.73a8,8,0,0,0,5.33,7.54A40,40,0,0,1,192,164Zm16-52a8,8,0,0,1-8,8h-4a36,36,0,0,1-36-36V80a8,8,0,0,1,16,0v4a20,20,0,0,0,20,20h4A8,8,0,0,1,208,112ZM60,120H56a8,8,0,0,1,0-16h4A20,20,0,0,0,80,84V80a8,8,0,0,1,16,0v4A36,36,0,0,1,60,120Z"/></symbol><symbol id="i-git-merge" viewBox="0 0 256 256"><path d="M208,112a32.05,32.05,0,0,0-30.69,23l-42.21-6a8,8,0,0,1-4.95-2.71L94.43,84.55A32,32,0,1,0,72,87v82a32,32,0,1,0,16,0V101.63l30,35a24,24,0,0,0,14.83,8.14l44,6.28A32,32,0,1,0,208,112ZM64,56A16,16,0,1,1,80,72,16,16,0,0,1,64,56ZM96,200a16,16,0,1,1-16-16A16,16,0,0,1,96,200Zm112-40a16,16,0,1,1,16-16A16,16,0,0,1,208,160Z"/></symbol><symbol id="i-gear" viewBox="0 0 256 256"><path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3-3L186,40.54a8,8,0,0,0-3.94-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3,3L40.54,70a8,8,0,0,0-6,3.94,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.49,1.56,3,3L70,215.46a8,8,0,0,0,3.94,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3-3L215.46,186a8,8,0,0,0,6-3.94,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06Zm-16.1-6.5a73.93,73.93,0,0,1,0,8.68,8,8,0,0,0,1.74,5.48l14.19,17.73a91.57,91.57,0,0,1-6.23,15L187,173.11a8,8,0,0,0-5.1,2.64,74.11,74.11,0,0,1-6.14,6.14,8,8,0,0,0-2.64,5.1l-2.51,22.58a91.32,91.32,0,0,1-15,6.23l-17.74-14.19a8,8,0,0,0-5-1.75h-.48a73.93,73.93,0,0,1-8.68,0,8,8,0,0,0-5.48,1.74L100.45,215.8a91.57,91.57,0,0,1-15-6.23L82.89,187a8,8,0,0,0-2.64-5.1,74.11,74.11,0,0,1-6.14-6.14,8,8,0,0,0-5.1-2.64L46.43,170.6a91.32,91.32,0,0,1-6.23-15l14.19-17.74a8,8,0,0,0,1.74-5.48,73.93,73.93,0,0,1,0-8.68,8,8,0,0,0-1.74-5.48L40.2,100.45a91.57,91.57,0,0,1,6.23-15L69,82.89a8,8,0,0,0,5.1-2.64,74.11,74.11,0,0,1,6.14-6.14A8,8,0,0,0,82.89,69L85.4,46.43a91.32,91.32,0,0,1,15-6.23l17.74,14.19a8,8,0,0,0,5.48,1.74,73.93,73.93,0,0,1,8.68,0,8,8,0,0,0,5.48-1.74L155.55,40.2a91.57,91.57,0,0,1,15,6.23L173.11,69a8,8,0,0,0,2.64,5.1,74.11,74.11,0,0,1,6.14,6.14,8,8,0,0,0,5.1,2.64l22.58,2.51a91.32,91.32,0,0,1,6.23,15l-14.19,17.74A8,8,0,0,0,199.87,123.66Z"/></symbol><symbol id="i-sparkle" viewBox="0 0 256 256"><path d="M197.58,129.06,146,110l-19-51.62a15.92,15.92,0,0,0-29.88,0L78,110l-51.62,19a15.92,15.92,0,0,0,0,29.88L78,178l19,51.62a15.92,15.92,0,0,0,29.88,0L146,178l51.62-19a15.92,15.92,0,0,0,0-29.88ZM137,164.22a8,8,0,0,0-4.74,4.74L112,223.85,91.78,169A8,8,0,0,0,87,164.22L32.15,144,87,123.78A8,8,0,0,0,91.78,119L112,64.15,132.22,119a8,8,0,0,0,4.74,4.74L191.85,144ZM144,40a8,8,0,0,1,8-8h16V16a8,8,0,0,1,16,0V32h16a8,8,0,0,1,0,16H184V64a8,8,0,0,1-16,0V48H152A8,8,0,0,1,144,40ZM248,88a8,8,0,0,1-8,8h-8v8a8,8,0,0,1-16,0V96h-8a8,8,0,0,1,0-16h8V72a8,8,0,0,1,16,0v8h8A8,8,0,0,1,248,88Z"/></symbol><symbol id="i-caret-down" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></symbol><symbol id="i-bug" viewBox="0 0 256 256"><path d="M144,92a12,12,0,1,1,12,12A12,12,0,0,1,144,92ZM100,80a12,12,0,1,0,12,12A12,12,0,0,0,100,80Zm116,64A87.76,87.76,0,0,1,213,167l22.24,9.72A8,8,0,0,1,232,192a7.89,7.89,0,0,1-3.2-.67L207.38,182a88,88,0,0,1-158.76,0L27.2,191.33A7.89,7.89,0,0,1,24,192a8,8,0,0,1-3.2-15.33L43,167A87.76,87.76,0,0,1,40,144v-8H16a8,8,0,0,1,0-16H40v-8a87.76,87.76,0,0,1,3-23L20.8,79.33a8,8,0,1,1,6.4-14.66L48.62,74a88,88,0,0,1,158.76,0l21.42-9.36a8,8,0,0,1,6.4,14.66L213,89.05a87.76,87.76,0,0,1,3,23v8h24a8,8,0,0,1,0,16H216ZM56,120H200v-8a72,72,0,0,0-144,0Zm64,95.54V136H56v8A72.08,72.08,0,0,0,120,215.54ZM200,144v-8H136v79.54A72.08,72.08,0,0,0,200,144Z"/></symbol><symbol id="i-arrow-up-right" viewBox="0 0 256 256"><path d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol><symbol id="i-rocket" viewBox="0 0 256 256"><path d="M152,224a8,8,0,0,1-8,8H112a8,8,0,0,1,0-16h32A8,8,0,0,1,152,224ZM128,112a12,12,0,1,0-12-12A12,12,0,0,0,128,112Zm95.62,43.83-12.36,55.63a16,16,0,0,1-25.51,9.11L158.51,200h-61L70.25,220.57a16,16,0,0,1-25.51-9.11L32.38,155.83a16.09,16.09,0,0,1,3.32-13.71l28.56-34.26a123.07,123.07,0,0,1,8.57-36.67c12.9-32.34,36-52.63,45.37-59.85a16,16,0,0,1,19.6,0c9.34,7.22,32.47,27.51,45.37,59.85a123.07,123.07,0,0,1,8.57,36.67l28.56,34.26A16.09,16.09,0,0,1,223.62,155.83ZM99.43,184h57.14c21.12-37.54,25.07-73.48,11.74-106.88C156.55,47.64,134.49,29,128,24c-6.51,5-28.57,23.64-40.33,53.12C74.36,110.52,78.31,146.46,99.43,184Zm-15,5.85Q68.28,160.5,64.83,132.16L48,152.36,60.36,208l.18-.13ZM208,152.36l-16.83-20.2q-3.42,28.28-19.56,57.69l23.85,18,.18.13Z"/></symbol><symbol id="i-shield-star" viewBox="0 0 256 256"><path d="M80.57,117A8,8,0,0,1,91,112.57l29,11.61V96a8,8,0,0,1,16,0v28.18l29-11.61A8,8,0,1,1,171,127.43l-30.31,12.12L158.4,163.2a8,8,0,1,1-12.8,9.6L128,149.33,110.4,172.8a8,8,0,1,1-12.8-9.6l17.74-23.65L85,127.43A8,8,0,0,1,80.57,117ZM224,56v56c0,52.72-25.52,84.67-46.93,102.19-23.06,18.86-46,25.27-47,25.53a8,8,0,0,1-4.2,0c-1-.26-23.91-6.67-47-25.53C57.52,196.67,32,164.72,32,112V56A16,16,0,0,1,48,40H208A16,16,0,0,1,224,56Zm-16,0L48,56l0,56c0,37.3,13.82,67.51,41.07,89.81A128.25,128.25,0,0,0,128,223.62a129.3,129.3,0,0,0,39.41-22.2C194.34,179.16,208,149.07,208,112Z"/></symbol><symbol id="i-graduation-cap" viewBox="0 0 256 256"><path d="M251.76,88.94l-120-64a8,8,0,0,0-7.52,0l-120,64a8,8,0,0,0,0,14.12L32,117.87v48.42a15.91,15.91,0,0,0,4.06,10.65C49.16,191.53,78.51,216,128,216a130,130,0,0,0,48-8.76V240a8,8,0,0,0,16,0V199.51a115.63,115.63,0,0,0,27.94-22.57A15.91,15.91,0,0,0,224,166.29V117.87l27.76-14.81a8,8,0,0,0,0-14.12ZM128,200c-43.27,0-68.72-21.14-80-33.71V126.4l76.24,40.66a8,8,0,0,0,7.52,0L176,143.47v46.34C163.4,195.69,147.52,200,128,200Zm80-33.75a97.83,97.83,0,0,1-16,14.25V134.93l16-8.53ZM188,118.94l-.22-.13-56-29.87a8,8,0,0,0-7.52,14.12L171,128l-43,22.93L25,96,128,41.07,231,96Z"/></symbol><symbol id="i-trophy" viewBox="0 0 256 256"><path d="M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8Zm144-8.9c0,35.52-29,64.64-64,64.9a64,64,0,0,1-64-64V56H192ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z"/></symbol><symbol id="i-envelope-simple" viewBox="0 0 256 256"><path d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></symbol><symbol id="i-map-pin" viewBox="0 0 256 256"><path d="M128,64a40,40,0,1,0,40,40A40,40,0,0,0,128,64Zm0,64a24,24,0,1,1,24-24A24,24,0,0,1,128,128Zm0-112a88.1,88.1,0,0,0-88,88c0,31.4,14.51,64.68,42,96.25a254.19,254.19,0,0,0,41.45,38.3,8,8,0,0,0,9.18,0A254.19,254.19,0,0,0,174,200.25c27.45-31.57,42-64.85,42-96.25A88.1,88.1,0,0,0,128,16Zm0,206c-16.53-13-72-60.75-72-118a72,72,0,0,1,144,0C200,161.23,144.53,209,128,222Z"/></symbol><symbol id="i-linkedin-logo" viewBox="0 0 256 256"><path d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z"/></symbol><symbol id="i-github-logo" viewBox="0 0 256 256"><path d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"/></symbol><symbol id="i-medium-logo" viewBox="0 0 256 256"><path d="M72,64a64,64,0,1,0,64,64A64.07,64.07,0,0,0,72,64Zm0,112a48,48,0,1,1,48-48A48.05,48.05,0,0,1,72,176ZM184,64c-5.68,0-16.4,2.76-24.32,21.25C154.73,96.8,152,112,152,128s2.73,31.2,7.68,42.75C167.6,189.24,178.32,192,184,192s16.4-2.76,24.32-21.25C213.27,159.2,216,144,216,128s-2.73-31.2-7.68-42.75C200.4,66.76,189.68,64,184,64Zm0,112c-5.64,0-16-18.22-16-48s10.36-48,16-48,16,18.22,16,48S189.64,176,184,176ZM248,72V184a8,8,0,0,1-16,0V72a8,8,0,0,1,16,0Z"/></symbol><symbol id="i-paper-plane-right" viewBox="0 0 256 256"><path d="M231.87,114l-168-95.89A16,16,0,0,0,40.92,37.34L71.55,128,40.92,218.67A16,16,0,0,0,56,240a16.15,16.15,0,0,0,7.93-2.1l167.92-96.05a16,16,0,0,0,.05-27.89ZM56,224a.56.56,0,0,0,0-.12L85.74,136H144a8,8,0,0,0,0-16H85.74L56.06,32.16A.46.46,0,0,0,56,32l168,95.83Z"/></symbol></svg>
 
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-content">
-            <a href="#" class="logo">
-                &lt;YousufNihal <span class="logo-tag">/&gt;</span>
-            </a>
-            <ul class="nav-links" id="nav-links">
-                <li><a href="#about">About</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Writeups</a></li>
-                <li><a href="#contact" class="nav-cta">Contact</a></li>
+    <a class="skip-link" href="#about">Skip to content</a>
+    <div class="progress" aria-hidden="true"></div>
+
+    <!-- Top bar -->
+    <nav class="topbar" aria-label="Primary">
+        <div class="wrap topbar-row">
+            <a href="#top" class="logo" aria-label="Yousuf Nihal, back to top">&lt;YousufNihal<span class="logo-tag">/&gt;</span></a>
+            <ul class="topbar-links">
+                <li><a href="#about" data-spy="about">About</a></li>
+                <li><a href="#skills" data-spy="skills">Expertise</a></li>
+                <li><a href="#experience" data-spy="experience">Experience</a></li>
+                <li><a href="#credentials" data-spy="credentials">Credentials</a></li>
+                <li><a href="#writeups" data-spy="writeups">Writeups</a></li>
+                <li><a href="#projects" data-spy="projects">Projects</a></li>
             </ul>
-            <div class="mobile-menu-btn" id="mobile-menu-btn">
-                <i class="ph ph-list"></i>
-            </div>
+            <a href="#contact" class="topbar-cta">Contact</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header id="hero" class="hero">
-        <!-- Interactive node particle network canvas -->
-        <canvas id="hero-canvas"></canvas>
-        
-        <div class="section-container" style="width: 100%; position: relative; z-index: 10;">
-            <div class="hero-grid">
-                <!-- Left: Title and descriptions -->
-                <div class="hero-content">
-                    <div class="hero-status-tag">
-                        <div class="status-dot"></div>
-                        <span class="status-text">Available for secure audits</span>
-                    </div>
-                    <h1>Hi, I'm <br><span class="gradient-text">Yousuf Nihal</span></h1>
-                    <div class="hero-tagline-scroller">
-                        Product Security Engineer | <strong>Offensive Security</strong>
-                    </div>
-                    <p class="hero-subtag">
-                        "Let me secure your insecurities" — breaking security to build clarity, crafting safety for a better reality.
-                    </p>
-                    <div class="hero-actions">
-                        <a href="#contact" class="btn btn-primary"><i class="ph ph-shield-check"></i> Establish Connection</a>
-                        <a href="#projects" class="btn btn-outline"><i class="ph ph-terminal-window"></i> Audit Writeups</a>
-                    </div>
-                    <div class="hero-badges">
-                        <div class="hero-badge-item"><i class="ph ph-shield-chevron"></i> OSCP (Pursuing)</div>
-                        <div class="hero-badge-item"><i class="ph ph-certificate"></i> eWPTX</div>
-                        <div class="hero-badge-item"><i class="ph ph-cloud"></i> GCP-ACE</div>
-                        <div class="hero-badge-item"><i class="ph ph-microsoft-excel-logo"></i> AZ-900</div>
-                        <div class="hero-badge-item"><i class="ph ph-bug"></i> CVE-2025-6478</div>
-                    </div>
-                </div>
-                
-                <!-- Right: Profile Radar & Diagnostics Dashboard -->
-                <div class="hero-visuals">
-                    <div class="profile-radar-wrapper">
-                        <div class="profile-radar-ring"></div>
-                        <div class="profile-radar-ring-2"></div>
-                        <div class="profile-img-frame">
-                            <img src="profile.jpg" alt="Yousuf Nihal Profile" class="profile-img">
-                            <div class="scan-line"></div>
-                        </div>
-                        
-                        <!-- Floating Glass Diagnostics Monitor (Left) -->
-                        <div class="appsec-dashboard-panel panel-left tilt-card" data-tilt-scale="1.05">
-                            <div class="dashboard-title">Diagnostics Monitor <span class="status-green">ACTIVE</span></div>
-                            <div class="dashboard-item">
-                                <span class="dashboard-label">CVE Disclosed</span>
-                                <span class="dashboard-value">CVE-2025-6478</span>
-                            </div>
-                            <div class="dashboard-item">
-                                <span class="dashboard-label">Sec Architecture</span>
-                                <span class="dashboard-value status-blue">Hardened</span>
-                            </div>
-                            <div class="dashboard-item">
-                                <span class="dashboard-label">Patches Applied</span>
-                                <span class="dashboard-value">450+ Patched</span>
-                            </div>
-                        </div>
+    <!-- Bottom tab bar (phones and small tablets) -->
+    <nav class="tabbar" aria-label="Sections">
+        <a href="#skills" data-spy="skills"><svg class="i" aria-hidden="true"><use href="#i-shield-check"/></svg><span>Expertise</span></a>
+        <a href="#experience" data-spy="experience"><svg class="i" aria-hidden="true"><use href="#i-briefcase"/></svg><span>Work</span></a>
+        <a href="#credentials" data-spy="credentials"><svg class="i" aria-hidden="true"><use href="#i-seal-check"/></svg><span>Certs</span></a>
+        <a href="#writeups" data-spy="writeups"><svg class="i" aria-hidden="true"><use href="#i-article"/></svg><span>Writeups</span></a>
+        <button type="button" id="menu-open" aria-haspopup="dialog"><svg class="i" aria-hidden="true"><use href="#i-list"/></svg><span>Menu</span></button>
+    </nav>
 
-                        <!-- Floating Glass Credentials Status (Right) -->
-                        <div class="appsec-dashboard-panel panel-right tilt-card" data-tilt-scale="1.05">
-                            <div class="dashboard-title">System Status <span class="status-blue">SECURE</span></div>
-                            <div class="dashboard-item">
-                                <span class="dashboard-label">Clearance</span>
-                                <span class="dashboard-value">Lead AppSec</span>
-                            </div>
-                            <div class="dashboard-item">
-                                <span class="dashboard-label">Scope VAPT</span>
-                                <span class="dashboard-value">Web/Mobile/API</span>
-                            </div>
-                            <div class="dashboard-item">
-                                <span class="dashboard-label">Threat Level</span>
-                                <span class="dashboard-value status-green">0 Pending</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <dialog class="sheet" id="menu" aria-label="All sections">
+        <div class="sheet-head">
+            <span class="eyebrow">Contents</span>
+            <button type="button" class="icon-btn" id="menu-close" aria-label="Close menu"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+        </div>
+        <ol class="sheet-list">
+            <li><a href="#about"><span>01</span>About</a></li>
+            <li><a href="#skills"><span>02</span>Expertise</a></li>
+            <li><a href="#experience"><span>03</span>Experience</a></li>
+            <li><a href="#credentials"><span>04</span>Certifications</a></li>
+            <li><a href="#honors"><span>05</span>Recognition</a></li>
+            <li><a href="#recommendations"><span>06</span>Recommendations</a></li>
+            <li><a href="#writeups"><span>07</span>Writeups</a></li>
+            <li><a href="#projects"><span>08</span>Projects</a></li>
+            <li><a href="#contact"><span>09</span>Contact</a></li>
+        </ol>
+    </dialog>
+
+    <!-- Cover -->
+    <header class="hero">
+        <div class="wrap hero-grid">
+            <p class="status"><span class="status-dot"></span>Available for secure audits</p>
+
+            <h1 class="hero-name"><span class="hero-hi">Hi, I'm</span> Yousuf <br>Nihal<span class="hero-dot">.</span></h1>
+
+            <div class="hero-copy">
+                <p class="hero-role">Product Security Engineer <span>/</span> <strong>Offensive Security</strong></p>
+                <p class="hero-line">“Let me secure your insecurities”</p>
+                <p class="hero-sub">Breaking security to build clarity, crafting safety for a better reality.</p>
             </div>
+
+            <figure class="portrait">
+                <img src="profile.jpg" alt="Portrait of Yousuf Nihal" width="711" height="948" fetchpriority="high" decoding="async">
+                <figcaption><span>Now</span> Emirates NBD</figcaption>
+            </figure>
+
+            <div class="hero-actions">
+                <a href="#contact" class="btn btn-primary">Get in touch <svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+                <a href="#writeups" class="btn btn-ghost">Read writeups</a>
+            </div>
+
+            <ul class="hero-chips" aria-label="Key certifications">
+                <li>eWPTX</li>
+                <li>CLLMSP</li>
+                <li>AZ-900</li>
+                <li class="is-pending">OSCP <span>pursuing</span></li>
+            </ul>
         </div>
-        <div class="scroll-indicator" onclick="document.querySelector('#about').scrollIntoView({behavior: 'smooth'})">
-            <i class="ph ph-caret-down"></i>
-        </div>
+
+        <dl class="wrap stats">
+            <div>
+                <dt>Published CVE</dt>
+                <dd><a href="https://www.cve.org/CVERecord?id=CVE-2025-6478" target="_blank" rel="noopener noreferrer">CVE&#8209;2025&#8209;6478</a></dd>
+            </div>
+            <div>
+                <dt>Disclosure accepted by</dt>
+                <dd>NASA</dd>
+            </div>
+            <div>
+                <dt>Patches applied</dt>
+                <dd>450+</dd>
+            </div>
+            <div>
+                <dt>Sectors audited</dt>
+                <dd>8</dd>
+            </div>
+        </dl>
     </header>
 
-    <!-- About Section -->
-    <section id="about" class="section reveal-on-scroll">
-        <div class="section-container">
-            <div class="about-grid">
-                <!-- Left Content description -->
-                <div class="about-text">
-                    <span class="section-tag">// IDENTITY MATRIX</span>
-                    <h2 class="section-title" style="margin-bottom: 2rem;">About_Me<span class="blink">_</span></h2>
-                    <p>
-                        Cybersecurity professional with extensive hands-on experience in penetration testing, security architecture, and project delivery across **BFSI, Government, Healthcare, Energy, Retail, eCommerce, FinTech, and EdTech** sectors.
-                    </p>
-                    <p>
-                        Proficient in offensive security techniques with a strong track record of identifying and exploiting vulnerabilities to strengthen overall security posture. A developer at heart who knows enough to write code that doesn't cry, understand software flows from the inside out, and lead pre-sales security assessments.
-                    </p>
-                    <a href="#contact" class="btn btn-outline" style="margin-top: 1rem;"><i class="ph ph-handshake"></i> Professional Handshake</a>
-                </div>
-                
-                <!-- Right High Tech Terminal Widget -->
-                <div class="terminal-widget tilt-card" data-tilt-scale="1.02">
-                    <div class="terminal-header">
-                        <div class="terminal-buttons">
-                            <span class="terminal-btn-close"></span>
-                            <span class="terminal-btn-min"></span>
-                            <span class="terminal-btn-max"></span>
-                        </div>
-                        <ul class="terminal-tabs">
-                            <li class="terminal-tab active" data-tab="whoami">whoami</li>
-                            <li class="terminal-tab" data-tab="capabilities">capabilities.sh</li>
-                            <li class="terminal-tab" data-tab="arsenal">arsenal.env</li>
+    <main>
+        <!-- 01 About -->
+        <section id="about" class="sec" aria-labelledby="about-h">
+            <div class="wrap sec-grid">
+                <header class="sec-head reveal">
+                    <p class="eyebrow">01 / whoami</p>
+                    <h2 id="about-h">About</h2>
+                </header>
+                <div class="sec-body about">
+                    <div class="about-text reveal">
+                        <p class="lead">Cybersecurity professional with extensive hands-on experience in penetration testing, security architecture, and project delivery.</p>
+                        <p>Proficient in offensive security techniques with a strong track record of identifying and exploiting vulnerabilities to strengthen overall security posture. A developer at heart who knows enough to write code that doesn't cry, understand software flows from the inside out, and lead pre-sales security assessments.</p>
+                        <ul class="sectors" aria-label="Sectors">
+                            <li>BFSI</li>
+                            <li>Government</li>
+                            <li>Healthcare</li>
+                            <li>Energy</li>
+                            <li>Retail</li>
+                            <li>eCommerce</li>
+                            <li>FinTech</li>
+                            <li>EdTech</li>
                         </ul>
                     </div>
-                    <div class="terminal-body" id="terminal-content">
-                        <!-- Default Whoami Content -->
-                        <div class="terminal-tab-content" id="tab-whoami">
-                            <div class="terminal-line">
-                                <span class="terminal-prompt">$</span><span class="terminal-cmd">cat /etc/mission</span>
-                                <div class="terminal-output">"To proactively identify and remediate security vulnerabilities across core applications, APIs, and microservice infrastructures before malicious adversaries exploit them."</div>
-                            </div>
-                            <div class="terminal-line">
-                                <span class="terminal-prompt">$</span><span class="terminal-cmd">whoami</span>
-                                <div class="terminal-output">Name: <span class="terminal-highlight">Yousuf Nihal</span><br>Role: <span class="terminal-highlight">Product Security Engineer</span><br>Sectors Audited: BFSI, Government, Healthcare, Energy, Retail, eCommerce, EdTech</div>
-                            </div>
-                            <div class="terminal-line">
-                                <span class="terminal-prompt">$</span><span class="cursor terminal-cursor">_</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Capabilities Content (Hidden by default) -->
-                        <div class="terminal-tab-content" id="tab-capabilities" style="display:none;">
-                            <div class="terminal-line">
-                                <span class="terminal-prompt">$</span><span class="terminal-cmd">./check_capabilities.sh</span>
-                                <div class="terminal-output">
-                                    [+] Penetration Testing: <span class="terminal-highlight">Advanced VAPT (Web, APIs, Android, iOS)</span><br>
-                                    [+] Secure Development: <span class="terminal-highlight">Source Code Review (SAST/DAST/SCA)</span><br>
-                                    [+] Cloud Infrastructures: <span class="terminal-highlight">GCP & Azure Architecture Validations</span><br>
-                                    [+] Risk Diagnostics: <span class="terminal-highlight">Threat Modeling & Secure Design Consultation</span>
-                                </div>
-                            </div>
-                            <div class="terminal-line">
-                                <span class="terminal-prompt">$</span><span class="cursor terminal-cursor">_</span>
-                            </div>
-                        </div>
-                        
-                        <!-- Arsenal Content (Hidden by default) -->
-                        <div class="terminal-tab-content" id="tab-arsenal" style="display:none;">
-                            <div class="terminal-line">
-                                <span class="terminal-prompt">$</span><span class="terminal-cmd">env | grep TOOLKIT</span>
-                                <div class="terminal-output">
-                                    TOOLKIT_INTERCEPTOR=<span class="terminal-highlight">Burp Suite Professional / OWASP ZAP</span><br>
-                                    TOOLKIT_STATIC_ANALYSER=<span class="terminal-highlight">Semgrep / SonarQube / Checkmarx</span><br>
-                                    TOOLKIT_MOBILE_REVERSE=<span class="terminal-highlight">MobSF / Jadx / Frida / Objection</span><br>
-                                    TOOLKIT_NETWORK_SCANNER=<span class="terminal-highlight">Nmap / Nessus / Wireshark</span>
-                                </div>
-                            </div>
-                            <div class="terminal-line">
-                                <span class="terminal-prompt">$</span><span class="cursor terminal-cursor">_</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Skills Section -->
-    <section id="skills" class="section reveal-on-scroll">
-        <div class="section-container">
-            <div class="section-header">
-                <span class="section-tag">// SECURE ARCHITECTURE DIRECTIVES</span>
-                <h2 class="section-title">Core_Security_Expertise<span class="blink">_</span></h2>
-            </div>
-            
-            <div class="skills-grid">
-                <!-- Skill Card 1 -->
-                <div class="glass-card skill-card tilt-card" data-tilt-scale="1.03">
-                    <div class="skill-card-icon">
-                        <i class="ph ph-code"></i>
-                    </div>
-                    <h3>Application Security</h3>
-                    <p>Comprehensive security assessments for Web Applications, APIs, Thick Clients, and modern application ecosystems, including manual penetration testing, secure code review, and secure SDLC practices.</p>
-                </div>
-                <!-- Skill Card 2 -->
-                <div class="glass-card skill-card tilt-card" data-tilt-scale="1.03">
-                    <div class="skill-card-icon">
-                        <i class="ph ph-device-mobile"></i>
-                    </div>
-                    <h3>Mobile Security</h3>
-                    <p>Static and dynamic security testing for Android and iOS applications, including reverse engineering, runtime analysis, and mobile application penetration testing aligned with OWASP MASVS.</p>
-                </div>
-                <!-- Skill Card 3 -->
-                <div class="glass-card skill-card tilt-card" data-tilt-scale="1.03">
-                    <div class="skill-card-icon">
-                        <i class="ph ph-shield-check"></i>
-                    </div>
-                    <h3>Product & Infrastructure Security</h3>
-                    <p>End-to-end product security across cloud and infrastructure environments, including Container Security, Kubernetes security, Network Security, and DevSecOps integration.</p>
-                </div>
-                <!-- Skill Card 4 -->
-                <div class="glass-card skill-card tilt-card" data-tilt-scale="1.03">
-                    <div class="skill-card-icon">
-                        <i class="ph ph-plugs-connected"></i>
-                    </div>
-                    <h3>API & Data Security</h3>
-                    <p>Security validation for REST and GraphQL APIs, authentication and authorization testing, WAF rule review, Database Security, and data protection controls.</p>
-                </div>
-                <!-- Skill Card 5 -->
-                <div class="glass-card skill-card tilt-card" data-tilt-scale="1.03">
-                    <div class="skill-card-icon">
-                        <i class="ph ph-git-merge"></i>
-                    </div>
-                    <h3>Secure Code Review & DevSecOps</h3>
-                    <p>Hands-on experience with SAST, DAST, IAST, SCA, CI/CD security integration, secure coding validation, and software supply chain security practices.</p>
-                </div>
-                <!-- Skill Card 6 -->
-                <div class="glass-card skill-card tilt-card" data-tilt-scale="1.03">
-                    <div class="skill-card-icon">
-                        <i class="ph ph-brain"></i>
-                    </div>
-                    <h3>Threat Modeling & Security Architecture</h3>
-                    <p>Threat modeling, attack surface analysis, trust boundary mapping, architecture review, configuration validation, and secure design assessments.</p>
-                </div>
-                <!-- Skill Card 7 -->
-                <div class="glass-card skill-card tilt-card" data-tilt-scale="1.03">
-                    <div class="skill-card-icon">
-                        <i class="ph ph-gear"></i>
-                    </div>
-                    <h3>Configuration & Platform Security</h3>
-                    <p>Web Server Security, configuration hardening, integration security review, infrastructure validation, and platform-level security assessments.</p>
-                </div>
-                <!-- Skill Card 8 -->
-                <div class="glass-card skill-card tilt-card" data-tilt-scale="1.03">
-                    <div class="skill-card-icon">
-                        <i class="ph ph-sparkle"></i>
-                    </div>
-                    <h3>Emerging Security Domains</h3>
-                    <p>Foundational exposure to LLM Security, AI security concepts, prompt attack risks, and secure AI integration practices.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Experience Section -->
-    <section id="experience" class="section reveal-on-scroll">
-        <div class="section-container">
-            <div class="section-header">
-                <span class="section-tag">// CHRONOLOGICAL ADVISORY ADVENT</span>
-                <h2 class="section-title" style="margin-bottom: 2rem;">Experience<span class="blink">_</span></h2>
-            </div>
-            
-            <div class="timeline">
-                <!-- Exp 1 (Emirates NBD) -->
-                <div class="timeline-item active-job">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card glass-card">
-                        <div class="timeline-header-row">
-                            <div class="timeline-title">
-                                <h3>Product Security Engineer</h3>
-                                <h4>Emirates NBD (Emirates National Bank Dubai)</h4>
+                    <div class="terminal reveal">
+                        <div class="terminal-bar">
+                            <span class="terminal-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+                            <div class="terminal-tabs" role="tablist" aria-label="Terminal sessions">
+                                <button type="button" role="tab" id="t-whoami" aria-selected="true" aria-controls="p-whoami" data-cmd="cat /etc/mission">whoami</button>
+                                <button type="button" role="tab" id="t-capabilities" aria-selected="false" aria-controls="p-capabilities" data-cmd="./check_capabilities.sh" tabindex="-1">capabilities.sh</button>
+                                <button type="button" role="tab" id="t-arsenal" aria-selected="false" aria-controls="p-arsenal" data-cmd="env | grep TOOLKIT" tabindex="-1">arsenal.env</button>
                             </div>
-                            <span class="timeline-date">07/2025 - Present</span>
                         </div>
-                        <ul>
+                        <div class="terminal-body">
+                            <p class="term-typing" id="term-typing" hidden><span class="term-prompt">$</span> <span id="term-typed"></span><span class="term-cursor"></span></p>
+
+                            <div class="term-panel" role="tabpanel" id="p-whoami" aria-labelledby="t-whoami" tabindex="0">
+                                <p><span class="term-prompt">$</span> cat /etc/mission</p>
+                                <p class="term-out">"To proactively identify and remediate security vulnerabilities across core applications, APIs, and microservice infrastructures before malicious adversaries exploit them."</p>
+                                <p><span class="term-prompt">$</span> whoami</p>
+                                <p class="term-out">name: <b>Yousuf Nihal</b><br>role: <b>Product Security Engineer</b></p>
+                                <p><span class="term-prompt">$</span> <span class="term-cursor"></span></p>
+                            </div>
+
+                            <div class="term-panel" role="tabpanel" id="p-capabilities" aria-labelledby="t-capabilities" tabindex="0" hidden>
+                                <p><span class="term-prompt">$</span> ./check_capabilities.sh</p>
+                                <dl class="term-list">
+                                    <dt>[+] Penetration Testing</dt>
+                                    <dd>Advanced VAPT (Web, APIs, Android, iOS)</dd>
+                                    <dt>[+] Secure Development</dt>
+                                    <dd>Source Code Review (SAST/DAST/SCA)</dd>
+                                    <dt>[+] Cloud Infrastructures</dt>
+                                    <dd>GCP &amp; Azure Architecture Validations</dd>
+                                    <dt>[+] Risk Diagnostics</dt>
+                                    <dd>Threat Modeling &amp; Secure Design Consultation</dd>
+                                </dl>
+                                <p><span class="term-prompt">$</span> <span class="term-cursor"></span></p>
+                            </div>
+
+                            <div class="term-panel" role="tabpanel" id="p-arsenal" aria-labelledby="t-arsenal" tabindex="0" hidden>
+                                <p><span class="term-prompt">$</span> env | grep TOOLKIT</p>
+                                <dl class="term-list">
+                                    <dt>TOOLKIT_INTERCEPTOR=</dt>
+                                    <dd>Burp Suite Professional / OWASP ZAP</dd>
+                                    <dt>TOOLKIT_STATIC_ANALYSER=</dt>
+                                    <dd>Semgrep / SonarQube / Checkmarx</dd>
+                                    <dt>TOOLKIT_MOBILE_REVERSE=</dt>
+                                    <dd>MobSF / Jadx / Frida / Objection</dd>
+                                    <dt>TOOLKIT_NETWORK_SCANNER=</dt>
+                                    <dd>Nmap / Nessus / Wireshark</dd>
+                                </dl>
+                                <p><span class="term-prompt">$</span> <span class="term-cursor"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 02 Expertise -->
+        <section id="skills" class="sec" aria-labelledby="skills-h">
+            <div class="wrap sec-grid">
+                <header class="sec-head reveal">
+                    <p class="eyebrow">02 / scope</p>
+                    <h2 id="skills-h">Expertise</h2>
+                </header>
+                <ul class="sec-body scope">
+                    <li class="reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-code"/></svg>
+                        <h3>Application Security</h3>
+                        <p>Comprehensive security assessments for Web Applications, APIs, Thick Clients, and modern application ecosystems, including manual penetration testing, secure code review, and secure SDLC practices.</p>
+                    </li>
+                    <li class="reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-device-mobile"/></svg>
+                        <h3>Mobile Security</h3>
+                        <p>Static and dynamic security testing for Android and iOS applications, including reverse engineering, runtime analysis, and mobile application penetration testing aligned with OWASP MASVS.</p>
+                    </li>
+                    <li class="reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-plugs-connected"/></svg>
+                        <h3>API &amp; Data Security</h3>
+                        <p>Security validation for REST and GraphQL APIs, authentication and authorization testing, WAF rule review, Database Security, and data protection controls.</p>
+                    </li>
+                    <li class="reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-brain"/></svg>
+                        <h3>Threat Modeling &amp; Security Architecture</h3>
+                        <p>Threat modeling, attack surface analysis, trust boundary mapping, architecture review, configuration validation, and secure design assessments.</p>
+                    </li>
+                    <li class="reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-git-merge"/></svg>
+                        <h3>Secure Code Review &amp; DevSecOps</h3>
+                        <p>Hands-on experience with SAST, DAST, IAST, SCA, CI/CD security integration, secure coding validation, and software supply chain security practices.</p>
+                    </li>
+                    <li class="reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-shield-check"/></svg>
+                        <h3>Product &amp; Infrastructure Security</h3>
+                        <p>End-to-end product security across cloud and infrastructure environments, including Container Security, Kubernetes security, Network Security, and DevSecOps integration.</p>
+                    </li>
+                    <li class="reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-gear"/></svg>
+                        <h3>Configuration &amp; Platform Security</h3>
+                        <p>Web Server Security, configuration hardening, integration security review, infrastructure validation, and platform-level security assessments.</p>
+                    </li>
+                    <li class="reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-sparkle"/></svg>
+                        <h3>LLM &amp; AI Security</h3>
+                        <p>LLM application security, AI security concepts, prompt attack risks, and secure AI integration practices, backed by the CLLMSP certification.</p>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 03 Experience -->
+        <section id="experience" class="sec" aria-labelledby="experience-h">
+            <div class="wrap sec-grid">
+                <header class="sec-head reveal">
+                    <p class="eyebrow">03 / timeline</p>
+                    <h2 id="experience-h">Experience</h2>
+                </header>
+                <ol class="sec-body timeline">
+                    <li class="role is-current reveal">
+                        <p class="role-date"><span class="role-now">Current</span> 07/2025 – Present</p>
+                        <h3>Product Security Engineer</h3>
+                        <p class="role-org">Emirates NBD (Emirates National Bank Dubai)</p>
+                        <ul class="role-list">
                             <li>Spearheading security for a core banking application building from scratch, ensuring robust security controls are integrated throughout the development lifecycle.</li>
-                            <li>Collaborating with with cross-functional development teams to provide continuous security consulting and remediation guidance.</li>
                             <li>Leading a team of security engineers, overseeing different components of the application, and reporting progress and findings to higher management.</li>
-                            <li>Performing in-depth Web Application, API, and Mobile Application (Android & iOS) Security Assessments to identify and mitigate vulnerabilities.</li>
-                            <li>Performing SAST, DAST, IAST, and SCA activities as part of the Secure SDLC, identifying vulnerabilities during different stages of the development lifecycle.</li>
-                            <li>Conducting Security Code Reviews, Container Security Reviews, and WAF Rules Analysis to strengthen overall security posture.</li>
-                            <li>Reviewing Database Security, Web Server Security, Configuration, and Integration to ensure compliance with security best practices and organizational standards.</li>
-                            <li>Aligned and implemented security controls in accordance with leading frameworks and compliance standards, including OWASP, PCI DSS, ISO 27001, GDPR, NIST, MITRE ATT&CK, OSSTMM, and CIS.</li>
-                            <li>Preparing comprehensive penetration testing reports, including detailed overviews, risk impacts, proof of concepts (PoC), and actionable remediation recommendations.</li>
-                            <li>Presenting findings to development and management teams, explaining technical and business issues in understandable terms and guiding developers throughout the remediation process.</li>
+                            <li>Performing in-depth Web Application, API, and Mobile Application (Android &amp; iOS) Security Assessments to identify and mitigate vulnerabilities.</li>
                         </ul>
-                        <div class="timeline-skills-tag">
-                            <span class="tag-mini">Banking Security</span>
-                            <span class="tag-mini">Threat Modeling</span>
-                            <span class="tag-mini">SAST/DAST</span>
-                            <span class="tag-mini">Secure SDLC</span>
-                            <span class="tag-mini">Team Leadership</span>
-                            <span class="tag-mini">OWASP & PCI DSS</span>
-                        </div>
-                    </div>
-                </div>
+                        <details class="role-more">
+                            <summary>Show 7 more responsibilities <svg class="i" aria-hidden="true"><use href="#i-caret-down"/></svg></summary>
+                            <ul class="role-list">
+                                <li>Collaborating with cross-functional development teams to provide continuous security consulting and remediation guidance.</li>
+                                <li>Performing SAST, DAST, IAST, and SCA activities as part of the Secure SDLC, identifying vulnerabilities during different stages of the development lifecycle.</li>
+                                <li>Conducting Security Code Reviews, Container Security Reviews, and WAF Rules Analysis to strengthen overall security posture.</li>
+                                <li>Reviewing Database Security, Web Server Security, Configuration, and Integration to ensure compliance with security best practices and organizational standards.</li>
+                                <li>Aligned and implemented security controls in accordance with leading frameworks and compliance standards, including OWASP, PCI DSS, ISO 27001, GDPR, NIST, MITRE ATT&amp;CK, OSSTMM, and CIS.</li>
+                                <li>Preparing comprehensive penetration testing reports, including detailed overviews, risk impacts, proof of concepts (PoC), and actionable remediation recommendations.</li>
+                                <li>Presenting findings to development and management teams, explaining technical and business issues in understandable terms and guiding developers throughout the remediation process.</li>
+                            </ul>
+                        </details>
+                        <ul class="tags" aria-label="Focus areas">
+                            <li>Banking Security</li>
+                            <li>Threat Modeling</li>
+                            <li>SAST/DAST</li>
+                            <li>Secure SDLC</li>
+                            <li>Team Leadership</li>
+                            <li>OWASP &amp; PCI DSS</li>
+                        </ul>
+                    </li>
 
-                <!-- Exp 2 (Wattlecorp) -->
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card glass-card">
-                        <div class="timeline-header-row">
-                            <div class="timeline-title">
-                                <h3>Penetration Tester</h3>
-                                <h4>Wattlecorp Cybersecurity Labs</h4>
-                            </div>
-                            <span class="timeline-date">11/2023 - 07/2025</span>
-                        </div>
-                        <ul>
-                            <li>Performed penetration assessment on web applications, API, mobile applications (android & iOS), networks, thick client applications, along with source code reviews and threat modelling to identify vulnerabilities.</li>
+                    <li class="role reveal">
+                        <p class="role-date">11/2023 – 07/2025</p>
+                        <h3>Penetration Tester</h3>
+                        <p class="role-org">Wattlecorp Cybersecurity Labs</p>
+                        <ul class="role-list">
+                            <li>Performed penetration assessment on web applications, API, mobile applications (android &amp; iOS), networks, thick client applications, along with source code reviews and threat modelling to identify vulnerabilities.</li>
                             <li>Assessed security of AI-enabled web applications integrated with Large Language Models (LLMs), covering LLM-specific attack scenarios and security checklists.</li>
-                            <li>Worked with clients across sectors including Energy, Retail, Healthcare, BFSI, eCommerce, Government, EdTech, etc.</li>
                             <li>Conducted security assessments on critical applications such as online banking platforms, healthcare portals, e-commerce websites, ERP/CRM systems, and industrial control dashboards identifying vulnerabilities and ensuring regulatory compliance.</li>
-                            <li>Prepared detailed penetration testing reports, outlining identified risks, impacts, POC, and remediation recommendations.</li>
-                            <li>Presented reports to clients, explaining them through both high-level overviews and technical details suitable for technical teams.</li>
-                            <li>Managed documentation related to VAPT services, including effort estimation, checklist maintenance, and creation of technical SOPs.</li>
-                            <li>Participated in QA activities, ensuring all security assessments and reports are accurate and comprehensive.</li>
-                            <li>Oversaw projects for team members and resolved technical blockers during the process.</li>
                         </ul>
-                        <div class="timeline-skills-tag">
-                            <span class="tag-mini">VAPT</span>
-                            <span class="tag-mini">OWASP Top 10</span>
-                            <span class="tag-mini">Mobile VAPT</span>
-                            <span class="tag-mini">AI & LLM Security</span>
-                            <span class="tag-mini">Thick Client</span>
-                            <span class="tag-mini">QA Auditing</span>
-                        </div>
-                    </div>
-                </div>
+                        <details class="role-more">
+                            <summary>Show 6 more responsibilities <svg class="i" aria-hidden="true"><use href="#i-caret-down"/></svg></summary>
+                            <ul class="role-list">
+                                <li>Worked with clients across sectors including Energy, Retail, Healthcare, BFSI, eCommerce, Government, EdTech, etc.</li>
+                                <li>Prepared detailed penetration testing reports, outlining identified risks, impacts, POC, and remediation recommendations.</li>
+                                <li>Presented reports to clients, explaining them through both high-level overviews and technical details suitable for technical teams.</li>
+                                <li>Managed documentation related to VAPT services, including effort estimation, checklist maintenance, and creation of technical SOPs.</li>
+                                <li>Participated in QA activities, ensuring all security assessments and reports are accurate and comprehensive.</li>
+                                <li>Oversaw projects for team members and resolved technical blockers during the process.</li>
+                            </ul>
+                        </details>
+                        <ul class="tags" aria-label="Focus areas">
+                            <li>VAPT</li>
+                            <li>OWASP Top 10</li>
+                            <li>Mobile VAPT</li>
+                            <li>AI &amp; LLM Security</li>
+                            <li>Thick Client</li>
+                            <li>QA Auditing</li>
+                        </ul>
+                    </li>
 
-                <!-- Exp 3 (Confidential) -->
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card glass-card">
-                        <div class="timeline-header-row">
-                            <div class="timeline-title">
-                                <h3>Security Analyst</h3>
-                                <h4>Confidential Startup</h4>
-                            </div>
-                            <span class="timeline-date">11/2021 - 11/2023</span>
-                        </div>
-                        <ul>
+                    <li class="role reveal">
+                        <p class="role-date">11/2021 – 11/2023</p>
+                        <h3>Security Analyst</h3>
+                        <p class="role-org">Confidential Startup</p>
+                        <ul class="role-list">
                             <li>As an early member of the founding team, contributed to building the company from the ground up by driving both security architecture and core product development.</li>
                             <li>Performed independent security assessments across web applications, APIs, and mobile platforms, identifying security gaps, proposing mitigation strategies, and preparing detailed vulnerability assessment reports aligned with best practices.</li>
                             <li>Led pre-sales calls to understand client requirements and communicate tailored security testing approaches.</li>
-                            <li>Managed end-to-end project delivery, including effort estimation, timeline planning, and stakeholder coordination.</li>
-                            <li>Authored detailed technical reports and executive summaries to effectively communicate findings to both technical and non-technical stakeholders.</li>
-                            <li>Collaborated with leadership to pitch technical capabilities during client meetings and product demos, directly contributing to business development efforts.</li>
                         </ul>
-                        <div class="timeline-skills-tag">
-                            <span class="tag-mini">Founding Team</span>
-                            <span class="tag-mini">Code Auditing</span>
-                            <span class="tag-mini">Pre-Sales Consulting</span>
-                            <span class="tag-mini">Project Delivery</span>
-                            <span class="tag-mini">Security Architecture</span>
-                        </div>
-                    </div>
-                </div>
+                        <details class="role-more">
+                            <summary>Show 3 more responsibilities <svg class="i" aria-hidden="true"><use href="#i-caret-down"/></svg></summary>
+                            <ul class="role-list">
+                                <li>Managed end-to-end project delivery, including effort estimation, timeline planning, and stakeholder coordination.</li>
+                                <li>Authored detailed technical reports and executive summaries to effectively communicate findings to both technical and non-technical stakeholders.</li>
+                                <li>Collaborated with leadership to pitch technical capabilities during client meetings and product demos, directly contributing to business development efforts.</li>
+                            </ul>
+                        </details>
+                        <ul class="tags" aria-label="Focus areas">
+                            <li>Founding Team</li>
+                            <li>Code Auditing</li>
+                            <li>Pre-Sales Consulting</li>
+                            <li>Project Delivery</li>
+                            <li>Security Architecture</li>
+                        </ul>
+                    </li>
+                </ol>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Credentials Section -->
-    <section id="credentials" class="section reveal-on-scroll" style="background: rgba(8, 9, 17, 0.4);">
-        <div class="section-container">
-            <div class="credentials-layout">
-                <!-- Left side: Certifications (Horizontal scroll) -->
-                <div class="certifications-part">
-                    <div class="section-header">
-                        <span class="section-tag">// VERIFIABLE DECREES</span>
-                        <h2 class="section-title" style="margin-bottom: 2rem;">Certifications<span class="blink">_</span></h2>
-                    </div>
-                    <div class="cert-scroll-container">
-                        <!-- Cert 1 (OSCP) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="OSCP.png" alt="OSCP Certificate Logo" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>Offensive Security Certified Professional (OSCP)</strong>
-                                <span class="cert-org-icon"><i class="ph ph-shield"></i> OffSec &bull; [Pursuing]</span>
-                            </div>
-                        </div>
-                        <!-- Cert 2 (eWPTX) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="INE Certified_ Web Application Penetration Tester Extreme.png" alt="eWPTX Certificate" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>Web Application Penetration Tester eXtreme (eWPTX)</strong>
-                                <span class="cert-org-icon"><i class="ph ph-shield-check"></i> INE Security &bull; 2025</span>
-                            </div>
-                        </div>
-                        <!-- Cert 3 (Google Cloud GCP-ACE) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="Google cloud certified_Associate cloud engineer.jpeg" alt="Google Cloud GCP-ACE Certificate" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>Google Cloud Certified Associate Cloud Engineer (GCP-ACE)</strong>
-                                <span class="cert-org-icon"><i class="ph ph-google-logo"></i> Google Cloud &bull; 2023</span>
-                            </div>
-                        </div>
-                        <!-- Cert 4 (Azure AZ-900) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="Azure.png" alt="Microsoft Azure AZ-900 Certificate" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>Azure Fundamentals (AZ-900)</strong>
-                                <span class="cert-org-icon"><i class="ph ph-microsoft-excel-logo"></i> Microsoft &bull; 2023</span>
-                            </div>
-                        </div>
-                        <!-- Cert 5 (Threat Modeling) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="Microsoft Certified_Threat Modelling.png" alt="Threat Modeling Security Fundamentals [TM-SF]" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>Threat Modeling Security Fundamentals [TM-SF]</strong>
-                                <span class="cert-org-icon"><i class="ph ph-microsoft-excel-logo"></i> Microsoft &bull; 2025</span>
-                            </div>
-                        </div>
-                        <!-- Cert 6 (API Penetration Testing) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="APISEC Certified_API Penetration Testing.png" alt="API Penetration Testing Certificate" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>API Penetration Testing</strong>
-                                <span class="cert-org-icon"><i class="ph ph-link"></i> APIsec University &bull; 2024</span>
-                            </div>
-                        </div>
-                        <!-- Cert 7 (Foundations of Cybersecurity) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="Foundation of Cybersecurity.png" alt="Google Foundations of Cybersecurity Certificate" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>Foundations of Cybersecurity</strong>
-                                <span class="cert-org-icon"><i class="ph ph-google-logo"></i> Google &bull; 2024</span>
-                            </div>
-                        </div>
-                        <!-- Cert 8 (Introduction to Cybersecurity) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="Cisco certified_Cybersecurity.png" alt="Cisco Cybersecurity Certificate" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>Introduction to Cybersecurity</strong>
-                                <span class="cert-org-icon"><i class="ph ph-cpu"></i> Cisco &bull; 2023</span>
-                            </div>
-                        </div>
-                        <!-- Cert 9 (Introduction to Network Analysis) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="Introduction to Network Analysis.png" alt="Introduction to Network Analysis Certificate" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>Introduction to Network Analysis</strong>
-                                <span class="cert-org-icon"><i class="ph ph-rss"></i> Security Blue Team &bull; 2024</span>
-                            </div>
-                        </div>
-                        <!-- Cert 10 (Fundamentals of SOC) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="Paloalto Certified Fundamentals of SOC.jpeg" alt="Palo Alto SOC Certificate" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>The Fundamentals of SOC</strong>
-                                <span class="cert-org-icon"><i class="ph ph-globe-hemisphere-east"></i> Palo Alto Networks &bull; 2023</span>
-                            </div>
-                        </div>
-                        <!-- Cert 11 (ISC2 Candidate) -->
-                        <div class="glass-card cert-premium-card tilt-card" data-tilt-scale="1.02">
-                            <div class="cert-hologram-visual">
-                                <img src="isc2-candidate.png" alt="ISC2 Candidate Certificate Logo" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="cert-content-box">
-                                <strong>ISC2 Candidate</strong>
-                                <span class="cert-org-icon"><i class="ph ph-circle-wavy-check"></i> ISC2 &bull; 2024</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- 04 Certifications -->
+        <section id="credentials" class="sec" aria-labelledby="credentials-h">
+            <div class="wrap sec-grid">
+                <header class="sec-head reveal">
+                    <p class="eyebrow">04 / verified</p>
+                    <h2 id="credentials-h">Certifications</h2>
+                    <p class="sec-note">Tap any credential to view the certificate.</p>
+                </header>
+                <div class="sec-body">
+                    <ul class="cert-grid">
+                        <li class="cert reveal">
+                            <a href="Yousuf%20Nihal_INE%20Certified_%20Web%20Application%20Penetration%20Tester%20Extreme.png" data-viewer data-title="eWPTX, Web Application Penetration Tester eXtreme">
+                                <img src="assets/thumbs/ewptx.webp" alt="" width="560" height="434" loading="lazy" decoding="async">
+                                <strong>eWPTX</strong>
+                                <span class="cert-name">Web Application Penetration Tester eXtreme</span>
+                                <span class="cert-meta">INE Security · 2025</span>
+                            </a>
+                        </li>
+                        <li class="cert reveal">
+                            <a href="Yousuf%20Nihal_CLLMSP.pdf" target="_blank" rel="noopener">
+                                <img src="assets/thumbs/cllmsp.webp" alt="" width="560" height="432" loading="lazy" decoding="async">
+                                <strong>CLLMSP</strong>
+                                <span class="cert-name">Certified LLM Security Professional</span>
+                                <span class="cert-meta">Red Team Leaders · 2026</span>
+                            </a>
+                        </li>
+                        <li class="cert is-pending reveal">
+                            <a href="OSCP.png" data-viewer data-title="OSCP, in progress">
+                                <img src="assets/thumbs/oscp.webp" alt="" width="560" height="482" loading="lazy" decoding="async">
+                                <strong>OSCP</strong>
+                                <span class="cert-name">Offensive Security Certified Professional</span>
+                                <span class="cert-meta">OffSec · Pursuing</span>
+                            </a>
+                        </li>
+                        <li class="cert reveal">
+                            <a href="Yousuf%20Nihal_Google%20cloud%20certified_Associate%20cloud%20engineer.jpeg" data-viewer data-title="Google Cloud Certified Associate Cloud Engineer">
+                                <img src="assets/thumbs/gcp-ace.webp" alt="" width="560" height="435" loading="lazy" decoding="async">
+                                <strong>GCP-ACE</strong>
+                                <span class="cert-name">Associate Cloud Engineer</span>
+                                <span class="cert-meta">Google Cloud · 2023–2026</span>
+                            </a>
+                        </li>
+                    </ul>
 
-                <!-- Right side: Honors & Awards -->
-                <div class="honors-part">
-                    <div class="section-header">
-                        <span class="section-tag">// DECORATIVE ACCOLADES</span>
-                        <h2 class="section-title" style="margin-bottom: 2rem;">Honors & Awards<span class="blink">_</span></h2>
-                    </div>
-                    <div class="honors-list">
-                        <!-- Award 1 -->
-                        <div class="honor-item glass-card tilt-card" data-tilt-scale="1.03">
-                            <div class="honor-icon-wrapper">
-                                <i class="ph ph-shield-star"></i>
-                            </div>
-                            <div class="honor-details">
-                                <strong>CVE-2025-6478 Authorship</strong>
-                                <span>Officially registered zero-day author for vulnerability identification and responsible disclosure.</span>
-                            </div>
-                        </div>
-                        <!-- Award 2 -->
-                        <div class="honor-item glass-card tilt-card" data-tilt-scale="1.03">
-                            <div class="honor-icon-wrapper">
-                                <i class="ph ph-rocket"></i>
-                            </div>
-                            <div class="honor-details">
-                                <strong>NASA Security Recognition</strong>
-                                <span>Responsible disclosure and identification of vulnerability validated and accepted by NASA.</span>
-                            </div>
-                        </div>
-                        <!-- Award 3 -->
-                        <div class="honor-item glass-card tilt-card" data-tilt-scale="1.03">
-                            <div class="honor-icon-wrapper" style="overflow: hidden; padding: 0;">
-                                <img src="Business ctf 2024 The vault of hope.jpeg" alt="HTB CTF Rank" style="width: 100%; height: 100%; object-fit: cover;">
-                            </div>
-                            <div class="honor-details">
-                                <strong>Hack The Box - Global Rank #331</strong>
-                                <span>Achieved a prominent global standing in the 'The Vault of Hope' CTF Competition (2024).</span>
-                            </div>
-                        </div>
-                        <!-- Award 4 -->
-                        <div class="honor-item glass-card tilt-card" data-tilt-scale="1.03">
-                            <div class="honor-icon-wrapper">
-                                <i class="ph ph-graduation-cap"></i>
-                            </div>
-                            <div class="honor-details">
-                                <strong>Anke Gyaani Research Recognition</strong>
-                                <span>Presented handwritten Tulu numerals CNN binarisation research at the KSCST International Conference.</span>
-                            </div>
-                        </div>
-                        <!-- Award 5 -->
-                        <div class="honor-item glass-card tilt-card" data-tilt-scale="1.03">
-                            <div class="honor-icon-wrapper">
-                                <i class="ph ph-trophy"></i>
-                            </div>
-                            <div class="honor-details">
-                                <strong>Book of Records Inductee</strong>
-                                <span>Inducted into America Book of Record (2022), India Book of Record (2021), and Asia Book of Record (2021).</span>
-                            </div>
-                        </div>
-                    </div>
+                    <ul class="ledger">
+                        <li class="reveal"><a href="Yousuf%20Nihal_Microsoft%20Certified%20Azure%20Fundamentals.png" data-viewer data-title="Microsoft Azure Fundamentals (AZ-900)">
+                            <img src="assets/thumbs/az-900.webp" alt="" width="560" height="431" loading="lazy" decoding="async">
+                            <span><strong>Azure Fundamentals (AZ-900)</strong><small>Microsoft · 2023</small></span>
+                        </a></li>
+                        <li class="reveal"><a href="Yousuf%20Nihal_Microsoft%20Certified_Threat%20Modelling.png" data-viewer data-title="Threat Modeling Security Fundamentals">
+                            <img src="assets/thumbs/threat-modeling.webp" alt="" width="560" height="417" loading="lazy" decoding="async">
+                            <span><strong>Threat Modeling Security Fundamentals</strong><small>Microsoft · 2025</small></span>
+                        </a></li>
+                        <li class="reveal"><a href="Yousuf%20Nihal_APISEC%20Certified_API%20Penetration%20Testing.png" data-viewer data-title="API Penetration Testing">
+                            <img src="assets/thumbs/api-pentest.webp" alt="" width="560" height="434" loading="lazy" decoding="async">
+                            <span><strong>API Penetration Testing</strong><small>APIsec University · 2024</small></span>
+                        </a></li>
+                        <li class="reveal"><a href="Foundation%20of%20Cybersecurity.png" data-viewer data-title="Foundations of Cybersecurity">
+                            <img src="assets/thumbs/foundations.webp" alt="" width="560" height="429" loading="lazy" decoding="async">
+                            <span><strong>Foundations of Cybersecurity</strong><small>Google · 2024</small></span>
+                        </a></li>
+                        <li class="reveal"><a href="Introduction%20to%20Network%20Analysis.png" data-viewer data-title="Introduction to Network Analysis">
+                            <img src="assets/thumbs/network-analysis.webp" alt="" width="560" height="394" loading="lazy" decoding="async">
+                            <span><strong>Introduction to Network Analysis</strong><small>Security Blue Team · 2024</small></span>
+                        </a></li>
+                        <li class="reveal"><a href="Yousuf%20Nihal_Cisco%20certified_Cybersecurity.png" data-viewer data-title="Introduction to Cybersecurity">
+                            <img src="assets/thumbs/cisco.webp" alt="" width="560" height="434" loading="lazy" decoding="async">
+                            <span><strong>Introduction to Cybersecurity</strong><small>Cisco · 2023</small></span>
+                        </a></li>
+                        <li class="reveal"><a href="Paloalto%20Certified%20Fundamentals%20of%20SOC.jpeg" data-viewer data-title="The Fundamentals of SOC">
+                            <img src="assets/thumbs/soc.webp" alt="" width="560" height="430" loading="lazy" decoding="async">
+                            <span><strong>The Fundamentals of SOC</strong><small>Palo Alto Networks · 2023</small></span>
+                        </a></li>
+                        <li class="reveal"><a href="isc2-candidate.png" data-viewer data-title="ISC2 Candidate">
+                            <img src="assets/thumbs/isc2.webp" alt="" width="560" height="560" loading="lazy" decoding="async">
+                            <span><strong>ISC2 Candidate</strong><small>ISC2 · 2024</small></span>
+                        </a></li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Recommendations Section -->
-    <section id="recommendations" class="section reveal-on-scroll">
-        <div class="section-container">
-            <div class="section-header">
-                <span class="section-tag">// PEER VERDICT REGISTRY</span>
-                <h2 class="section-title" style="margin-bottom: 2rem;">Recommendations<span class="blink">_</span></h2>
-            </div>
-            
-            <div class="testimonials-wrapper">
-                <!-- Rec 1 -->
-                <div class="testimonial-premium-card tilt-card" data-tilt-scale="1.02">
-                    <i class="ph ph-quotes testimonial-quote-icon"></i>
-                    <p>
-                        "I’ve had the opportunity to work with Nihal and have always been impressed by his career-driven mindset and commitment to excellence. He is highly disciplined when it comes to delivering his work on time, ensuring both reliability and quality in every engagement. Nihal’s expertise in web application penetration testing stands out — he approaches each assessment with precision, depth, and a strong problem-solving attitude."
-                    </p>
-                    <div class="testimonial-author-box">
-                        <strong>Karthik Kalathil</strong>
-                        <span>Founder & CTO, Wattlecorp Cybersecurity Labs</span>
-                    </div>
-                </div>
-                <!-- Rec 2 -->
-                <div class="testimonial-premium-card tilt-card" data-tilt-scale="1.02">
-                    <i class="ph ph-quotes testimonial-quote-icon"></i>
-                    <p>
-                        "It has been a pleasure working alongside Yousuf Nihal, a truly talented and dedicated professional. Yousuf is exceptionally skilled at what he does, consistently delivering high-quality work with remarkable precision and attention to detail. His ability to tackle challenges with a solutions-driven mindset is truly inspiring."
-                    </p>
-                    <div class="testimonial-author-box">
-                        <strong>Muhammad Midhlaj</strong>
-                        <span>Cybersecurity Professional | Offensive Security Engineer | R&D</span>
-                    </div>
-                </div>
-                <!-- Rec 3 -->
-                <div class="testimonial-premium-card tilt-card" data-tilt-scale="1.02">
-                    <i class="ph ph-quotes testimonial-quote-icon"></i>
-                    <p>
-                        "I had the pleasure of working with Yousuf Nihal, who consistently impressed me with his deep cybersecurity knowledge and sharp analytical skills. He approaches challenges with clarity and confidence, and his guidance played a key role in my professional growth. Yousuf’s dedication, patience, and support truly set him apart as a teammate."
-                    </p>
-                    <div class="testimonial-author-box">
-                        <strong>Sinan Rahman C K</strong>
-                        <span>Security Researcher</span>
-                    </div>
+        <!-- 05 Recognition -->
+        <section id="honors" class="sec" aria-labelledby="honors-h">
+            <div class="wrap sec-grid">
+                <header class="sec-head reveal">
+                    <p class="eyebrow">05 / honors</p>
+                    <h2 id="honors-h">Recognition</h2>
+                </header>
+                <div class="sec-body honors">
+                    <article class="honor honor-lead reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-bug"/></svg>
+                        <h3>CVE-2025-6478 Authorship</h3>
+                        <p>Officially registered zero-day author for vulnerability identification and responsible disclosure.</p>
+                        <a class="text-link" href="https://www.cve.org/CVERecord?id=CVE-2025-6478" target="_blank" rel="noopener noreferrer">View CVE record <svg class="i" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></a>
+                    </article>
+                    <article class="honor honor-lead reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-rocket"/></svg>
+                        <h3>NASA Security Recognition</h3>
+                        <p>Responsible disclosure and identification of vulnerability validated and accepted by NASA.</p>
+                    </article>
+                    <article class="honor reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-shield-star"/></svg>
+                        <h3>Hack The Box Business CTF 2024: Team Rank #331 of 943</h3>
+                        <p>Competed with team W-c0rp in 'The Vault of Hope' CTF competition.</p>
+                        <a class="text-link" href="Business%20ctf%202024%20The%20vault%20of%20hope.jpeg" data-viewer data-title="Hack The Box Business CTF 2024">View certificate <svg class="i" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+                    </article>
+                    <article class="honor reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-graduation-cap"/></svg>
+                        <h3>Anke Gyaani Research Recognition</h3>
+                        <p>Presented handwritten Tulu numerals CNN binarisation research at the KSCST International Conference.</p>
+                    </article>
+                    <article class="honor reveal">
+                        <svg class="i" aria-hidden="true"><use href="#i-trophy"/></svg>
+                        <h3>Book of Records Inductee</h3>
+                        <p>Inducted into America Book of Record (2022), India Book of Record (2021), and Asia Book of Record (2021).</p>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Writeups Section (Medium articles as advisory reports) -->
-    <section id="projects" class="section reveal-on-scroll">
-        <div class="section-container">
-            <div class="section-header">
-                <span class="section-tag">// THREAT INTELLIGENCE ADVISORIES</span>
-                <h2 class="section-title" style="margin-bottom: 2rem;">Writeups<span class="blink">_</span></h2>
+        <!-- 06 Recommendations -->
+        <section id="recommendations" class="sec sec-wide" aria-labelledby="recommendations-h">
+            <div class="wrap">
+                <header class="sec-head reveal">
+                    <p class="eyebrow">06 / peers</p>
+                    <h2 id="recommendations-h">Recommendations</h2>
+                </header>
             </div>
-            
-            <div class="projects-grid">
-                <!-- Writeup 1 -->
-                <div class="glass-card advisory-card tilt-card" data-tilt-scale="1.02">
-                    <div class="advisory-header">
-                        <span class="advisory-vuln-id">ADV-ATO-01</span>
-                        <span class="advisory-severity-badge critical">Critical</span>
-                    </div>
-                    <h3>How I Took Over an Account Using Host Header Injection</h3>
-                    <p>
-                        This advisory details a critical account takeover vulnerability found by leveraging Host Header Injection. It explains the core process of identifying the vulnerability and using it to intercept password reset tokens.
-                    </p>
-                    <a href="https://medium.com/@yousufnihal/how-i-took-over-an-account-using-host-header-injection-8c198732996f"
-                        target="_blank" rel="noopener noreferrer" class="btn-link">Read Advisory <i class="ph ph-arrow-right"></i></a>
-                </div>
+            <ul class="quotes" tabindex="0" aria-label="Recommendations, scroll for more">
+                <li class="quote reveal">
+                    <blockquote>"I’ve had the opportunity to work with Nihal and have always been impressed by his career-driven mindset and commitment to excellence. He is highly disciplined when it comes to delivering his work on time, ensuring both reliability and quality in every engagement. Nihal’s expertise in web application penetration testing stands out — he approaches each assessment with precision, depth, and a strong problem-solving attitude."</blockquote>
+                    <footer><span class="monogram" aria-hidden="true">KK</span><span><strong>Karthik Kalathil</strong><small>Founder &amp; CTO, Wattlecorp Cybersecurity Labs</small></span></footer>
+                </li>
+                <li class="quote reveal">
+                    <blockquote>"It has been a pleasure working alongside Yousuf Nihal, a truly talented and dedicated professional. Yousuf is exceptionally skilled at what he does, consistently delivering high-quality work with remarkable precision and attention to detail. His ability to tackle challenges with a solutions-driven mindset is truly inspiring."</blockquote>
+                    <footer><span class="monogram" aria-hidden="true">MM</span><span><strong>Muhammad Midhlaj</strong><small>Cybersecurity Professional | Offensive Security Engineer | R&amp;D</small></span></footer>
+                </li>
+                <li class="quote reveal">
+                    <blockquote>"I had the pleasure of working with Yousuf Nihal, who consistently impressed me with his deep cybersecurity knowledge and sharp analytical skills. He approaches challenges with clarity and confidence, and his guidance played a key role in my professional growth. Yousuf’s dedication, patience, and support truly set him apart as a teammate."</blockquote>
+                    <footer><span class="monogram" aria-hidden="true">SR</span><span><strong>Sinan Rahman C K</strong><small>Security Researcher</small></span></footer>
+                </li>
+            </ul>
+        </section>
 
-                <!-- Writeup 2 -->
-                <div class="glass-card advisory-card tilt-card" data-tilt-scale="1.02">
-                    <div class="advisory-header">
-                        <span class="advisory-vuln-id">ADV-SEC-02</span>
-                        <span class="advisory-severity-badge high">High</span>
-                    </div>
-                    <h3>Mass Assignment Vulnerability: Hidden Risks in Web Applications</h3>
-                    <p>
-                        This article covers the details of Mass Assignment vulnerabilities in web platforms. It discusses how improperly handled model properties can allow parameter modification and lead to admin privilege escalation.
-                    </p>
-                    <a href="https://medium.com/@yousufnihal/mass-assignment-vulnerability-a-hidden-risk-in-web-applications-60679ed651e8"
-                        target="_blank" rel="noopener noreferrer" class="btn-link">Read Advisory <i class="ph ph-arrow-right"></i></a>
+        <!-- 07 Writeups -->
+        <section id="writeups" class="sec" aria-labelledby="writeups-h">
+            <div class="wrap sec-grid">
+                <header class="sec-head reveal">
+                    <p class="eyebrow">07 / advisories</p>
+                    <h2 id="writeups-h">Writeups</h2>
+                </header>
+                <div class="sec-body advisories">
+                    <a class="advisory sev-critical reveal" href="https://medium.com/@yousufnihal/how-i-took-over-an-account-using-host-header-injection-8c198732996f" target="_blank" rel="noopener noreferrer">
+                        <span class="advisory-meta"><span>ADV-ATO-01</span><span class="sev">Critical</span></span>
+                        <h3>How I Took Over an Account Using Host Header Injection</h3>
+                        <p>This advisory details a critical account takeover vulnerability found by leveraging Host Header Injection. It explains the core process of identifying the vulnerability and using it to intercept password reset tokens.</p>
+                        <span class="text-link">Read advisory <svg class="i" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span>
+                    </a>
+                    <a class="advisory sev-high reveal" href="https://medium.com/@yousufnihal/mass-assignment-vulnerability-a-hidden-risk-in-web-applications-60679ed651e8" target="_blank" rel="noopener noreferrer">
+                        <span class="advisory-meta"><span>ADV-SEC-02</span><span class="sev">High</span></span>
+                        <h3>Mass Assignment Vulnerability: Hidden Risks in Web Applications</h3>
+                        <p>This article covers the details of Mass Assignment vulnerabilities in web platforms. It discusses how improperly handled model properties can allow parameter modification and lead to admin privilege escalation.</p>
+                        <span class="text-link">Read advisory <svg class="i" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span>
+                    </a>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Development / Research Projects Section -->
-    <section id="dev-projects" class="section reveal-on-scroll">
-        <div class="section-container">
-            <div class="section-header">
-                <span class="section-tag">// SOURCE CODE REPOSITORIES</span>
-                <h2 class="section-title" style="margin-bottom: 2rem;">Projects<span class="blink">_</span></h2>
-            </div>
-            
-            <div class="projects-grid">
-                <!-- Project 1 -->
-                <div class="glass-card project-premium-card tilt-card" data-tilt-scale="1.02">
-                    <div>
-                        <div class="project-premium-header">
-                            <i class="ph ph-code-block project-premium-icon"></i>
-                            <span class="project-tag-pill">ML | CNN</span>
-                        </div>
+        <!-- 08 Projects -->
+        <section id="projects" class="sec" aria-labelledby="projects-h">
+            <div class="wrap sec-grid">
+                <header class="sec-head reveal">
+                    <p class="eyebrow">08 / builds</p>
+                    <h2 id="projects-h">Projects</h2>
+                </header>
+                <div class="sec-body builds">
+                    <a class="build build-lead reveal" href="https://kscst.org.in/spp/46_series/46s_spp/01_Seminar_Projects/098_46S_BE_3842.pdf" target="_blank" rel="noopener noreferrer">
+                        <span class="build-kind">Published research · ML | CNN</span>
                         <h3>Anke Gyaani - Numeral Recognition</h3>
                         <p>Research project published by KSCST. Focuses on handwritten Tulu numeral recognition, dataset creation, and thresholding using Deep CNN algorithms.</p>
-                    </div>
-                    <div>
-                        <div class="project-skills-footer">
-                            <strong>Skills:</strong> <span style="font-size: 0.8rem; color: var(--text-secondary);">Python, ML, CNN, HTML, CSS</span>
-                        </div>
-                        <a href="https://kscst.org.in/spp/46_series/46s_spp/01_Seminar_Projects/098_46S_BE_3842.pdf"
-                            target="_blank" rel="noopener noreferrer" class="btn-link">View Publication <i class="ph ph-arrow-right"></i></a>
-                    </div>
-                </div>
-
-                <!-- Project 2 -->
-                <div class="glass-card project-premium-card tilt-card" data-tilt-scale="1.02">
-                    <div>
-                        <div class="project-premium-header">
-                            <i class="ph ph-shopping-cart project-premium-icon"></i>
-                            <span class="project-tag-pill purple">Full Stack</span>
-                        </div>
+                        <code>Python, ML, CNN, HTML, CSS</code>
+                        <span class="text-link">View publication <svg class="i" aria-hidden="true"><use href="#i-arrow-up-right"/></svg></span>
+                    </a>
+                    <article class="build reveal">
+                        <span class="build-kind">Full Stack</span>
                         <h3>FURNICART</h3>
                         <p>Full-stack, fully responsive e-commerce web application designed for a streamlined furniture shopping experience.</p>
-                    </div>
-                    <div>
-                        <div class="project-skills-footer">
-                            <strong>Skills:</strong> <span style="font-size: 0.8rem; color: var(--text-secondary);">Django, SQLite, PHP, HTML, CSS, JS</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 3 -->
-                <div class="glass-card project-premium-card tilt-card" data-tilt-scale="1.02">
-                    <div>
-                        <div class="project-premium-header">
-                            <i class="ph ph-graduation-cap project-premium-icon"></i>
-                            <span class="project-tag-pill purple">Frontend</span>
-                        </div>
-                        <h3>Marvel Pre-University College</h3>
-                        <p>Developed a comprehensive and interactive institutional website for Marvel Pre-University College.</p>
-                    </div>
-                    <div>
-                        <div class="project-skills-footer">
-                            <strong>Skills:</strong> <span style="font-size: 0.8rem; color: var(--text-secondary);">HTML, CSS, JS, PHP</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 4 -->
-                <div class="glass-card project-premium-card tilt-card" data-tilt-scale="1.02">
-                    <div>
-                        <div class="project-premium-header">
-                            <i class="ph ph-device-mobile project-premium-icon"></i>
-                            <span class="project-tag-pill">Android</span>
-                        </div>
-                        <h3>FLASHLIGHT APP</h3>
-                        <p>Implemented a fully functional Android-based flashlight application with intuitive interface controls.</p>
-                    </div>
-                    <div>
-                        <div class="project-skills-footer">
-                            <strong>Skills:</strong> <span style="font-size: 0.8rem; color: var(--text-secondary);">Android Studio, Java, XML, JSON</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 5 -->
-                <div class="glass-card project-premium-card tilt-card" data-tilt-scale="1.02">
-                    <div>
-                        <div class="project-premium-header">
-                            <i class="ph ph-cube project-premium-icon"></i>
-                            <span class="project-tag-pill amber">3D Graphics</span>
-                        </div>
-                        <h3>Tower of Hanoi in 3D</h3>
-                        <p>Presented a programmatic 3D animation solving the classic Tower of Hanoi mathematical puzzle.</p>
-                    </div>
-                    <div>
-                        <div class="project-skills-footer">
-                            <strong>Skills:</strong> <span style="font-size: 0.8rem; color: var(--text-secondary);">OpenGL, C Programming</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Project 6 -->
-                <div class="glass-card project-premium-card tilt-card" data-tilt-scale="1.02">
-                    <div>
-                        <div class="project-premium-header">
-                            <i class="ph ph-database project-premium-icon"></i>
-                            <span class="project-tag-pill purple">Full Stack</span>
-                        </div>
+                        <code>Django, SQLite, PHP, HTML, CSS, JS</code>
+                    </article>
+                    <article class="build reveal">
+                        <span class="build-kind">Full Stack</span>
                         <h3>Showroom Management</h3>
                         <p>Designed and created the complete database backend and web application for managing vehicle showroom sales.</p>
-                    </div>
-                    <div>
-                        <div class="project-skills-footer">
-                            <strong>Skills:</strong> <span style="font-size: 0.8rem; color: var(--text-secondary);">Flask, MySQL, HTML, CSS, JS, Bootstrap</span>
-                        </div>
-                    </div>
+                        <code>Flask, MySQL, HTML, CSS, JS, Bootstrap</code>
+                    </article>
+                    <article class="build reveal">
+                        <span class="build-kind">Frontend</span>
+                        <h3>Marvel Pre-University College</h3>
+                        <p>Developed a comprehensive and interactive institutional website for Marvel Pre-University College.</p>
+                        <code>HTML, CSS, JS, PHP</code>
+                    </article>
+                    <article class="build reveal">
+                        <span class="build-kind">Android</span>
+                        <h3>Flashlight App</h3>
+                        <p>Implemented a fully functional Android-based flashlight application with intuitive interface controls.</p>
+                        <code>Android Studio, Java, XML, JSON</code>
+                    </article>
+                    <article class="build reveal">
+                        <span class="build-kind">3D Graphics</span>
+                        <h3>Tower of Hanoi in 3D</h3>
+                        <p>Presented a programmatic 3D animation solving the classic Tower of Hanoi mathematical puzzle.</p>
+                        <code>OpenGL, C Programming</code>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="section reveal-on-scroll" style="background: rgba(8, 9, 17, 0.4);">
-        <div class="section-container">
-            <div class="contact-wrapper">
-                <!-- Left contact info -->
-                <div class="contact-info">
-                    <span class="section-tag">// SECURE TRANSMISSION PORT</span>
-                    <h2 class="section-title" style="margin-bottom: 2rem;">Initiate_Handshake<span class="blink">_</span></h2>
-                    <p>
-                        Interested in securing your enterprise applications, performing zero-day vulnerability audits, or discussing potential software security engineering opportunities? My transmission port is open.
-                    </p>
-                    
-                    <div class="contact-channels">
-                        <div class="contact-channel-card">
-                            <div class="channel-icon"><i class="ph ph-envelope-simple"></i></div>
-                            <div class="channel-details">
-                                <span>SECURE MAIL</span>
-                                <strong>yousufnihal01@gmail.com</strong>
-                            </div>
-                        </div>
-                        <div class="contact-channel-card">
-                            <div class="channel-icon"><i class="ph ph-map-pin"></i></div>
-                            <div class="channel-details">
-                                <span>GEOLOCATION</span>
-                                <strong>Cyberspace (Remote)</strong>
-                            </div>
-                        </div>
+        <!-- 09 Contact -->
+        <section id="contact" class="sec contact" aria-labelledby="contact-h">
+            <div class="wrap contact-grid">
+                <div class="contact-intro reveal">
+                    <p class="eyebrow">09 / contact</p>
+                    <h2 id="contact-h">My transmission port is open<span class="hero-dot">.</span></h2>
+                    <p>Interested in securing your enterprise applications, performing zero-day vulnerability audits, or discussing potential software security engineering opportunities?</p>
+                    <a class="contact-mail" href="mailto:yousufnihal01@gmail.com"><svg class="i" aria-hidden="true"><use href="#i-envelope-simple"/></svg>yousufnihal01@gmail.com</a>
+                    <p class="contact-place"><svg class="i" aria-hidden="true"><use href="#i-map-pin"/></svg>Remote</p>
+                    <ul class="socials">
+                        <li><a href="https://www.linkedin.com/in/yousuf-nihal-8816121a6/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><svg class="i" aria-hidden="true"><use href="#i-linkedin-logo"/></svg></a></li>
+                        <li><a href="https://github.com/yousufnihal" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg class="i" aria-hidden="true"><use href="#i-github-logo"/></svg></a></li>
+                        <li><a href="https://medium.com/@yousufnihal" target="_blank" rel="noopener noreferrer" aria-label="Medium"><svg class="i" aria-hidden="true"><use href="#i-medium-logo"/></svg></a></li>
+                    </ul>
+                </div>
+
+                <form class="form reveal" id="contactForm" action="https://formspree.io/f/myknrkyn" method="POST" novalidate>
+                    <input class="honeypot" type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true">
+                    <div class="field">
+                        <label for="name">Name / Organisation</label>
+                        <input type="text" id="name" name="name" required autocomplete="name" aria-describedby="nameError">
+                        <span class="field-error" id="nameError"></span>
                     </div>
-                </div>
-
-                <!-- Right contact form panel -->
-                <div class="cyber-form-panel">
-                    <form id="contactForm" action="https://formspree.io/f/myknrkyn" method="POST">
-                        <!-- Honeypot -->
-                        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-
-                        <div class="form-group-futuristic">
-                            <input type="text" id="name" name="name" placeholder=" " required autocomplete="off">
-                            <label for="name">Name / Organisation</label>
-                            <span class="form-error-text" id="nameError"></span>
-                        </div>
-                        <div class="form-group-futuristic">
-                            <input type="email" id="email" name="email" placeholder=" " required autocomplete="off">
-                            <label for="email">Connection Email</label>
-                            <span class="form-error-text" id="emailError"></span>
-                        </div>
-                        <div class="form-group-futuristic">
-                            <textarea id="message" name="message" rows="5" placeholder=" " required></textarea>
-                            <label for="message">Transmission Message</label>
-                            <span class="form-error-text" id="msgError"></span>
-                        </div>
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">
-                            <i class="ph ph-paper-plane-right"></i> Send Transmission
-                        </button>
-                        <div id="formStatus" class="form-status-box"></div>
-                    </form>
-                </div>
+                    <div class="field">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required autocomplete="email" inputmode="email" aria-describedby="emailError">
+                        <span class="field-error" id="emailError"></span>
+                    </div>
+                    <div class="field">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="5" required aria-describedby="messageError"></textarea>
+                        <span class="field-error" id="messageError"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Send message <svg class="i" aria-hidden="true"><use href="#i-paper-plane-right"/></svg></button>
+                    <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+                </form>
             </div>
-        </div>
-    </section>
+        </section>
+    </main>
 
-    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-content">
-            <div class="social-links">
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="GitHub"><i class="ph ph-github-logo"></i></a>
-                <a href="https://www.linkedin.com/in/yousuf-nihal-8816121a6/" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="LinkedIn"><i class="ph ph-linkedin-logo"></i></a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Twitter"><i class="ph ph-twitter-logo"></i></a>
-            </div>
-            <p class="copyright-text">&copy; <span id="year"></span> Yousuf Nihal. All rights reserved. Hardened via secure designs.</p>
+        <div class="wrap footer-row">
+            <p>&copy; <span id="year">2026</span> Yousuf Nihal. All rights reserved. Hardened via secure designs.</p>
+            <a class="text-link" href="#top">Back to top</a>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <!-- Certificate viewer -->
+    <dialog class="viewer" id="viewer" aria-labelledby="viewer-title">
+        <div class="viewer-head">
+            <p id="viewer-title"></p>
+            <button type="button" class="icon-btn" id="viewer-close" aria-label="Close certificate"><svg class="i" aria-hidden="true"><use href="#i-x"/></svg></button>
+        </div>
+        <img id="viewer-img" alt="">
+    </dialog>
 </body>
 
 </html>

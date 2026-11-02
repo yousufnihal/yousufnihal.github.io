@@ -272,16 +272,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const netCanvas = document.getElementById('net');
     if (netCanvas) startNetwork(netCanvas);
 
-    /* ---------- Marquee ---------- */
-
-    // The duplicate list makes the loop seamless, and is hidden from assistive tech
-    document.querySelectorAll('[data-marquee]').forEach(marquee => {
-        const track = marquee.firstElementChild;
-        const copy = track.cloneNode(true);
-        copy.setAttribute('aria-hidden', 'true');
-        marquee.append(copy);
-    });
-
     /* ---------- Scroll-linked motion ---------- */
 
     const scrubbers = new Map();
@@ -333,18 +323,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 sheet.style.setProperty('--sheet', clamp((vh - rect.top) / (vh * 0.7)).toFixed(3));
             });
         });
-
-        document.querySelectorAll('[data-parallax]').forEach(el => {
-            const speed = parseFloat(el.dataset.parallax);
-            addScrub(el, (rect, vh) => {
-                if (window.innerWidth < 1200) {
-                    el.style.translate = '';
-                    return;
-                }
-                const offset = (rect.top + rect.height / 2 - vh / 2) * speed;
-                el.style.translate = `0 ${offset.toFixed(1)}px`;
-            });
-        });
     }
 
     /* ---------- Reveals ---------- */
@@ -352,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const revealElements = document.querySelectorAll('.reveal');
     if (motionOK) {
         // Sibling items in a list come in one after another
-        document.querySelectorAll('.gallery-track, .bento, .advisories, .builds, .quotes, .socials').forEach(group => {
+        document.querySelectorAll('.gallery-track, .bento, .advisories, .builds, .socials').forEach(group => {
             [...group.children].forEach((child, i) => child.style.setProperty('--stagger', `${(i % 4) * 70}ms`));
         });
 
@@ -405,51 +383,60 @@ document.addEventListener('DOMContentLoaded', () => {
         roles.forEach(role => stageObserver.observe(role));
     }
 
-    /* ---------- Pinned certificate gallery (large screens only) ---------- */
+    /* ---------- Certificate preview pane (large screens) ---------- */
 
-    const gallery = document.getElementById('credentials');
-    const galleryTrack = document.getElementById('gallery-track');
-    const galleryFill = document.getElementById('gallery-fill');
+    const certPane = document.getElementById('cert-pane');
+    const certPaneImg = document.getElementById('cert-pane-img');
+    const certPaneScan = document.getElementById('cert-pane-scan');
+    const certs = [...document.querySelectorAll('.cert')];
 
-    if (gallery && galleryTrack && motionOK) {
-        const wide = window.matchMedia('(min-width: 1024px) and (min-height: 600px)');
-        const pin = gallery.querySelector('.gallery-pin');
-        let distance = 0;
-
-        const measure = () => {
-            if (!wide.matches) {
-                gallery.classList.remove('is-pinned');
-                gallery.style.height = '';
-                galleryTrack.style.transform = '';
-                return;
+    if (certPane && certPaneImg) {
+        const showCert = (cert) => {
+            if (cert.classList.contains('is-previewed')) return;
+            certs.forEach(c => c.classList.toggle('is-previewed', c === cert));
+            certPane.classList.toggle('is-dark', cert.classList.contains('is-pending'));
+            certPaneImg.src = cert.querySelector('img').getAttribute('src');
+            if (motionOK && certPaneScan.animate) {
+                certPaneScan.animate(
+                    [{ transform: 'translateY(-110%)' }, { transform: 'translateY(420%)' }],
+                    { duration: 650, easing: 'cubic-bezier(0.3, 0, 0.3, 1)' }
+                );
             }
-            gallery.classList.add('is-pinned');
-            distance = Math.max(0, galleryTrack.scrollWidth - pin.clientWidth);
-            gallery.style.height = `${window.innerHeight + distance}px`;
-            requestUpdate();
         };
 
-        addScrub(gallery, (rect) => {
-            if (!wide.matches) return;
-            const p = distance ? clamp(-rect.top / distance) : 0;
-            galleryTrack.style.transform = `translate3d(${(-p * distance).toFixed(1)}px, 0, 0)`;
-            if (galleryFill) galleryFill.style.transform = `scaleX(${p.toFixed(3)})`;
+        certs.forEach(cert => {
+            cert.addEventListener('pointerenter', () => showCert(cert));
+            cert.addEventListener('focusin', () => showCert(cert));
         });
-
-        // Tabbing to an off-screen card scrolls the page to the point that shows it
-        galleryTrack.addEventListener('focusin', (e) => {
-            if (!wide.matches || !distance) return;
-            const card = e.target.closest('.cert');
-            const x = clamp((card.offsetLeft - pin.clientWidth / 3) / distance);
-            window.scrollTo(0, gallery.offsetTop + x * distance);
-        });
-
-        measure();
-        window.addEventListener('resize', measure, { passive: true });
-        document.fonts.ready.then(measure);
+        certs[0].classList.add('is-previewed');
+        certPane.classList.add('is-dark');
     }
 
-    /* ---------- Count-up and scramble effects ---------- */
+    /* ---------- Count-up and decode effects ---------- */
+
+    const decode = (el, duration = 800) => {
+        if (el.dataset.decoding) return;
+        el.dataset.decoding = '1';
+        const finalText = el.textContent;
+        const glyphs = 'abcdefghkmnrstx01<>/#$%';
+        const start = performance.now();
+        const step = (now) => {
+            const p = clamp((now - start) / duration);
+            const settled = Math.floor(p * finalText.length);
+            let out = finalText.slice(0, settled);
+            for (let i = settled; i < finalText.length; i++) {
+                out += /[\s-]/.test(finalText[i]) ? finalText[i] : glyphs[Math.floor(Math.random() * glyphs.length)];
+            }
+            el.textContent = out;
+            if (p < 1) {
+                requestAnimationFrame(step);
+            } else {
+                el.textContent = finalText;
+                delete el.dataset.decoding;
+            }
+        };
+        requestAnimationFrame(step);
+    };
 
     if (motionOK) {
         const once = (el, fn) => {
@@ -474,23 +461,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        document.querySelectorAll('[data-scramble]').forEach(el => {
-            const finalText = el.textContent;
-            const glyphs = '01<>/#$%&*+=';
-            once(el, () => {
-                const start = performance.now();
-                const step = (now) => {
-                    const p = clamp((now - start) / 1000);
-                    const settled = Math.floor(p * finalText.length);
-                    let out = finalText.slice(0, settled);
-                    for (let i = settled; i < finalText.length; i++) {
-                        out += finalText[i] === '-' ? '-' : glyphs[Math.floor(Math.random() * glyphs.length)];
-                    }
-                    el.textContent = out;
-                    if (p < 1) requestAnimationFrame(step);
-                };
-                requestAnimationFrame(step);
-            });
+        // Numbers and the accent word of each heading decode into place
+        document.querySelectorAll('[data-scramble], .title em .word').forEach(el => {
+            once(el, () => decode(el));
         });
     }
 
@@ -506,20 +479,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { passive: true });
         });
 
-        // 3D tilt
-        document.querySelectorAll('[data-tilt]').forEach(el => {
-            const max = parseFloat(el.dataset.tilt);
-            el.addEventListener('pointermove', (e) => {
-                const rect = el.getBoundingClientRect();
-                const px = (e.clientX - rect.left) / rect.width - 0.5;
-                const py = (e.clientY - rect.top) / rect.height - 0.5;
-                el.style.transition = 'transform 0.1s linear';
-                el.style.transform = `perspective(900px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg)`;
-            }, { passive: true });
-            el.addEventListener('pointerleave', () => {
-                el.style.transition = '';
-                el.style.transform = '';
-            });
+        // Nav labels decode on hover
+        document.querySelectorAll('.topbar-links a').forEach(link => {
+            link.addEventListener('pointerenter', () => decode(link, 350));
         });
 
         // Magnetic buttons
@@ -528,73 +490,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 const rect = el.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
-                el.style.translate = `${(x * 0.18).toFixed(1)}px ${(y * 0.28).toFixed(1)}px`;
+                el.style.translate = `${(x * 0.12).toFixed(1)}px ${(y * 0.2).toFixed(1)}px`;
             }, { passive: true });
             el.addEventListener('pointerleave', () => {
                 el.style.translate = '';
             });
         });
-
-        // Hero panels drift against the pointer for depth
-        const heroVisual = document.getElementById('hero-visual');
-        if (heroVisual) {
-            const layers = heroVisual.querySelectorAll('[data-depth]');
-            window.addEventListener('pointermove', (e) => {
-                if (window.scrollY > window.innerHeight) return;
-                const px = e.clientX / window.innerWidth - 0.5;
-                const py = e.clientY / window.innerHeight - 0.5;
-                layers.forEach(layer => {
-                    const depth = parseFloat(layer.dataset.depth);
-                    layer.style.setProperty('--dx', `${(px * depth).toFixed(1)}px`);
-                    layer.style.setProperty('--dy', `${(py * depth).toFixed(1)}px`);
-                });
-            }, { passive: true });
-        }
-
-        // Cursor ring: only animates while catching up to the pointer
-        const cursor = document.getElementById('cursor');
-        if (cursor) {
-            const pos = { x: 0, y: 0, tx: 0, ty: 0 };
-            let running = false;
-            const follow = () => {
-                pos.x += (pos.tx - pos.x) * 0.2;
-                pos.y += (pos.ty - pos.y) * 0.2;
-                cursor.style.transform = `translate3d(${pos.x.toFixed(1)}px, ${pos.y.toFixed(1)}px, 0)`;
-                if (Math.abs(pos.tx - pos.x) + Math.abs(pos.ty - pos.y) > 0.2) {
-                    requestAnimationFrame(follow);
-                } else {
-                    running = false;
-                }
-            };
-            window.addEventListener('pointermove', (e) => {
-                pos.tx = e.clientX;
-                pos.ty = e.clientY;
-                cursor.classList.add('is-on');
-                cursor.classList.toggle('is-big', Boolean(e.target.closest('a, button, summary, input, textarea, [role="tab"]')));
-                if (!running) {
-                    running = true;
-                    requestAnimationFrame(follow);
-                }
-            }, { passive: true });
-        }
     }
 
-    /* ---------- Skills accordion ---------- */
+    /* ---------- Skills: accordion on small screens, side panel on large ones ---------- */
 
     const skills = [...document.querySelectorAll('#skills-list .skill')];
+    const skillsWide = window.matchMedia('(min-width: 1024px)');
+
+    const openSkill = (skill) => {
+        skills.forEach(other => {
+            const isTarget = other === skill;
+            other.classList.toggle('is-open', isTarget);
+            other.querySelector('button').setAttribute('aria-expanded', String(isTarget));
+        });
+    };
+
     skills.forEach(skill => {
         const button = skill.querySelector('button');
         button.addEventListener('click', () => {
-            const opening = button.getAttribute('aria-expanded') !== 'true';
-            skills.forEach(other => {
-                other.classList.remove('is-open');
-                other.querySelector('button').setAttribute('aria-expanded', 'false');
+            // The side panel always shows one skill; the accordion may close fully
+            const closing = button.getAttribute('aria-expanded') === 'true' && !skillsWide.matches;
+            openSkill(closing ? null : skill);
+        });
+        button.addEventListener('focus', () => {
+            if (skillsWide.matches) openSkill(skill);
+        });
+        if (canHover) {
+            button.addEventListener('pointerenter', () => {
+                if (skillsWide.matches) openSkill(skill);
             });
-            if (opening) {
-                skill.classList.add('is-open');
-                button.setAttribute('aria-expanded', 'true');
-            }
-            requestUpdate();
+        }
+    });
+
+    // Leaving the accordion fully closed must not leave the side panel empty
+    skillsWide.addEventListener('change', () => {
+        if (skillsWide.matches && !skills.some(s => s.classList.contains('is-open'))) openSkill(skills[0]);
+    });
+
+    /* ---------- Recommendations switcher ---------- */
+
+    const quotes = [...document.querySelectorAll('#quotes .quote')];
+    const quoteTabs = [...document.querySelectorAll('#quote-tabs button')];
+
+    quoteTabs.forEach((tab, index) => {
+        tab.addEventListener('click', () => {
+            quoteTabs.forEach(t => t.setAttribute('aria-pressed', String(t === tab)));
+            quotes.forEach((quote, i) => {
+                quote.classList.toggle('is-active', i === index);
+                quote.classList.add('revealed');
+            });
         });
     });
 
@@ -651,6 +601,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabs = [...document.querySelectorAll('.terminal-tabs [role="tab"]')];
     const typingLine = document.getElementById('term-typing');
     const typedText = document.getElementById('term-typed');
+    const termLog = document.getElementById('term-log');
+    const termForm = document.getElementById('term-form');
+    const termInput = document.getElementById('term-input');
 
     if (tabs.length && typingLine && typedText) {
         const typingSpeed = 35; // MS delay per character
@@ -661,6 +614,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectTab = (tab) => {
             session++;
             const current = session;
+            termLog.textContent = '';
 
             tabs.forEach(t => {
                 const selected = t === tab;
@@ -702,10 +656,77 @@ document.addEventListener('DOMContentLoaded', () => {
             const firstRun = new IntersectionObserver(([entry]) => {
                 if (!entry.isIntersecting) return;
                 firstRun.disconnect();
-                selectTab(tabs.find(t => t.getAttribute('aria-selected') === 'true'));
+                if (!termLog.childElementCount) selectTab(tabs.find(t => t.getAttribute('aria-selected') === 'true'));
             }, { threshold: 0.35 });
             firstRun.observe(document.querySelector('.terminal'));
         }
+
+        // Output is only ever written with textContent, so input can't inject markup
+        const print = (text, className) => {
+            const line = document.createElement('p');
+            if (className) line.className = className;
+            line.textContent = text;
+            termLog.append(line);
+        };
+
+        const tabFor = { whoami: 0, capabilities: 1, arsenal: 2 };
+        const sections = ['about', 'skills', 'experience', 'credentials', 'honors', 'recommendations', 'writeups', 'projects', 'contact'];
+
+        const commands = {
+            help: () => [
+                'whoami         mission and role',
+                'capabilities   what I test',
+                'arsenal        my toolkit',
+                'certs          all certifications',
+                'contact        how to reach me',
+                'ls             list sections',
+                'goto <name>    jump to a section',
+                'clear          clear the screen'
+            ],
+            certs: () => certs.map(c => `${c.querySelector('strong').textContent} | ${c.querySelector('.cert-meta').textContent}`),
+            contact: () => ['yousufnihal01@gmail.com', 'Cyberspace (Remote)'],
+            ls: () => sections,
+            sudo: () => ['Permission denied. Nice try, though.']
+        };
+
+        termForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const raw = termInput.value.trim();
+            termInput.value = '';
+            if (!raw) return;
+
+            const [name, arg] = raw.toLowerCase().split(/\s+/);
+
+            if (name in tabFor) {
+                selectTab(tabs[tabFor[name]]);
+                return;
+            }
+
+            // Anything else replaces the tab content with a scrolling log
+            session++;
+            typingLine.hidden = true;
+            tabs.forEach(t => { panelFor(t).hidden = true; });
+
+            if (name === 'clear') {
+                termLog.textContent = '';
+                return;
+            }
+
+            print(`$ ${raw}`, 'term-echo');
+
+            if (name === 'goto' && sections.includes(arg)) {
+                print(`Moving to ${arg}...`, 'term-out');
+                document.getElementById(arg).scrollIntoView();
+            } else if (name === 'goto') {
+                print(`Unknown section. Try: ${sections.join(', ')}`, 'term-out');
+            } else if (Object.hasOwn(commands, name)) {
+                commands[name]().forEach(line => print(line, 'term-out'));
+            } else {
+                print(`command not found: ${name}. Type help for options.`, 'term-out');
+            }
+
+            termLog.parentElement.scrollTop = termLog.parentElement.scrollHeight;
+        });
 
         tabs.forEach((tab, index) => {
             tab.addEventListener('click', () => {

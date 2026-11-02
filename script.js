@@ -24,6 +24,22 @@ document.addEventListener('DOMContentLoaded', () => {
             mask.append(inner);
             line.append(mask);
         });
+        if ('cursor' in line.dataset) {
+            const cursor = document.createElement('span');
+            cursor.className = 'name-cursor';
+            line.append(cursor);
+        }
+    });
+
+    // Section labels type themselves out when revealed
+    document.querySelectorAll('.kicker.reveal').forEach(kicker => {
+        const text = kicker.textContent;
+        kicker.textContent = '';
+        const typed = document.createElement('span');
+        typed.className = 'type';
+        typed.textContent = text;
+        typed.style.setProperty('--n', text.length);
+        kicker.append(typed);
     });
 
     // Headings: per-word masks that keep the markup (like <em>) and the spaces intact
@@ -71,15 +87,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroEnter = () => root.classList.add('ready');
     const loader = document.getElementById('loader');
     const loaderCount = document.getElementById('loader-count');
+    const loaderBar = document.getElementById('loader-bar');
 
     if (loader && !root.classList.contains('no-intro')) {
         try { sessionStorage.setItem('intro-seen', '1'); } catch (e) { /* private mode */ }
 
-        const duration = 850;
+        const duration = 1000;
         const start = performance.now();
         const tick = (now) => {
             const p = clamp((now - start) / duration);
             loaderCount.textContent = Math.round(p * 100);
+            loaderBar.style.transform = `scaleX(${p.toFixed(3)})`;
             if (p < 1) {
                 requestAnimationFrame(tick);
                 return;
@@ -94,89 +112,139 @@ document.addEventListener('DOMContentLoaded', () => {
         heroEnter();
     }
 
-    /* ---------- Aurora background (WebGL, hero only) ---------- */
+    /* ---------- Network nodes (hero only) ---------- */
 
-    const startAurora = (canvas) => {
-        const gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
-        if (!gl) return; // The CSS gradient behind the canvas remains as the fallback
+    const startNetwork = (canvas) => {
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
 
-        const compile = (type, source) => {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            return shader;
+        const neon = '57, 255, 154';
+        const pointer = { x: -1000, y: -1000 };
+        let nodes = [];
+        let packets = [];
+        let width = 0;
+        let height = 0;
+        let linkDistance = 120;
+
+        const build = () => {
+            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+            width = canvas.clientWidth;
+            height = canvas.clientHeight;
+            canvas.width = Math.round(width * dpr);
+            canvas.height = Math.round(height * dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            linkDistance = width < 700 ? 96 : 136;
+
+            // Node count follows area and is capped, since links are checked pair by pair
+            const count = Math.max(22, Math.min(64, Math.round((width * height) / 19000)));
+            nodes = Array.from({ length: count }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.28,
+                vy: (Math.random() - 0.5) * 0.28
+            }));
+            packets = Array.from({ length: 4 }, () => ({ from: null, to: null, t: 1 }));
         };
 
-        const program = gl.createProgram();
-        gl.attachShader(program, compile(gl.VERTEX_SHADER, 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'));
-        gl.attachShader(program, compile(gl.FRAGMENT_SHADER, `
-            precision mediump float;
-            uniform vec2 r; uniform float t; uniform vec2 m;
-            float n(vec2 p){return sin(p.x)*sin(p.y);}
-            float fbm(vec2 p){float a=.5,s=0.;for(int i=0;i<4;i++){s+=a*n(p);p=mat2(1.6,1.2,-1.2,1.6)*p+t*.12;a*=.5;}return s;}
-            void main(){
-                vec2 uv=gl_FragCoord.xy/r.y;
-                vec2 q=uv*1.5+m*.25;
-                float f=fbm(q+fbm(q*1.3+t*.06)*1.6);
-                float g=fbm(q*.8-vec2(t*.05,0.)+f);
-                vec3 night=vec3(.043,.024,.094);
-                vec3 violet=vec3(.36,.16,.95);
-                vec3 pink=vec3(.95,.2,.55);
-                vec3 lime=vec3(.72,1.,.2);
-                vec3 c=mix(night,violet,smoothstep(-.25,.6,f));
-                c=mix(c,pink,smoothstep(.1,.7,g)*.7);
-                c=mix(c,lime,smoothstep(.42,.8,f*g*2.2)*.35);
-                float fade=smoothstep(0.,.75,gl_FragCoord.y/r.y);
-                gl_FragColor=vec4(mix(night,c,fade*.85),1.);
-            }`));
-        gl.linkProgram(program);
-        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
-        gl.useProgram(program);
-
-        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-        const position = gl.getAttribLocation(program, 'p');
-        gl.enableVertexAttribArray(position);
-        gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
-
-        const uRes = gl.getUniformLocation(program, 'r');
-        const uTime = gl.getUniformLocation(program, 't');
-        const uMouse = gl.getUniformLocation(program, 'm');
-        const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
-
-        // Soft gradients hide low resolution, so render small and let CSS scale it up
-        const resize = () => {
-            const scale = 0.35;
-            canvas.width = Math.max(1, Math.round(canvas.clientWidth * scale));
-            canvas.height = Math.max(1, Math.round(canvas.clientHeight * scale));
-            gl.viewport(0, 0, canvas.width, canvas.height);
-            gl.uniform2f(uRes, canvas.width, canvas.height);
+        const nearestTo = (node) => {
+            let best = null;
+            let bestDistance = linkDistance * linkDistance;
+            nodes.forEach(other => {
+                if (other === node) return;
+                const d = (other.x - node.x) ** 2 + (other.y - node.y) ** 2;
+                if (d < bestDistance && Math.random() > 0.3) {
+                    best = other;
+                    bestDistance = d;
+                }
+            });
+            return best;
         };
 
-        const draw = (seconds) => {
-            mouse.x += (mouse.tx - mouse.x) * 0.04;
-            mouse.y += (mouse.ty - mouse.y) * 0.04;
-            gl.uniform1f(uTime, seconds);
-            gl.uniform2f(uMouse, mouse.x, mouse.y);
-            gl.drawArrays(gl.TRIANGLES, 0, 3);
+        const draw = () => {
+            ctx.clearRect(0, 0, width, height);
+            const maxSq = linkDistance * linkDistance;
+
+            nodes.forEach(n => {
+                n.x += n.vx;
+                n.y += n.vy;
+                if (n.x < 0 || n.x > width) n.vx *= -1;
+                if (n.y < 0 || n.y > height) n.vy *= -1;
+            });
+
+            // Links grouped by strength so each group is one stroke call
+            const faint = new Path2D();
+            const strong = new Path2D();
+            for (let i = 0; i < nodes.length; i++) {
+                const a = nodes[i];
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const b = nodes[j];
+                    const d = (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
+                    if (d < maxSq) {
+                        const path = d < maxSq * 0.35 ? strong : faint;
+                        path.moveTo(a.x, a.y);
+                        path.lineTo(b.x, b.y);
+                    }
+                }
+                if ((a.x - pointer.x) ** 2 + (a.y - pointer.y) ** 2 < maxSq * 1.6) {
+                    strong.moveTo(a.x, a.y);
+                    strong.lineTo(pointer.x, pointer.y);
+                }
+            }
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = `rgba(${neon}, 0.07)`;
+            ctx.stroke(faint);
+            ctx.strokeStyle = `rgba(${neon}, 0.16)`;
+            ctx.stroke(strong);
+
+            ctx.fillStyle = `rgba(${neon}, 0.5)`;
+            nodes.forEach(n => ctx.fillRect(n.x - 1.25, n.y - 1.25, 2.5, 2.5));
+
+            // Data packets hop between linked nodes
+            ctx.fillStyle = `rgb(${neon})`;
+            packets.forEach(p => {
+                if (p.t >= 1) {
+                    p.from = p.to || nodes[Math.floor(Math.random() * nodes.length)];
+                    p.to = nearestTo(p.from);
+                    p.t = 0;
+                    if (!p.to) {
+                        p.t = 1;
+                        p.to = null;
+                        return;
+                    }
+                }
+                p.t = Math.min(1, p.t + 0.035);
+                const x = p.from.x + (p.to.x - p.from.x) * p.t;
+                const y = p.from.y + (p.to.y - p.from.y) * p.t;
+                ctx.fillRect(x - 1.5, y - 1.5, 3, 3);
+            });
         };
 
-        resize();
+        build();
+
+        let resizeWidth = window.innerWidth;
         window.addEventListener('resize', () => {
-            resize();
-            if (!motionOK) draw(8);
+            // Phone address bars fire resize while scrolling; only rebuild on a real width change
+            if (window.innerWidth === resizeWidth) return;
+            resizeWidth = window.innerWidth;
+            build();
+            if (!motionOK) draw();
         }, { passive: true });
 
         if (!motionOK) {
-            draw(8);
+            draw();
             return;
         }
 
         if (canHover) {
-            window.addEventListener('pointermove', (e) => {
-                mouse.tx = e.clientX / window.innerWidth - 0.5;
-                mouse.ty = 0.5 - e.clientY / window.innerHeight;
+            canvas.parentElement.addEventListener('pointermove', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                pointer.x = e.clientX - rect.left;
+                pointer.y = e.clientY - rect.top;
             }, { passive: true });
+            canvas.parentElement.addEventListener('pointerleave', () => {
+                pointer.x = -1000;
+                pointer.y = -1000;
+            });
         }
 
         // Capped at 30fps, and fully stopped when off screen or in a background tab
@@ -187,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
             frame = requestAnimationFrame(loop);
             if (now - last < 33) return;
             last = now;
-            draw(now / 1000);
+            draw();
         };
         const sync = () => {
             cancelAnimationFrame(frame);
@@ -201,8 +269,8 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('visibilitychange', sync);
     };
 
-    const auroraCanvas = document.getElementById('aurora');
-    if (auroraCanvas) startAurora(auroraCanvas);
+    const netCanvas = document.getElementById('net');
+    if (netCanvas) startNetwork(netCanvas);
 
     /* ---------- Marquee ---------- */
 
@@ -259,7 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Coloured sections grow from an inset card to full bleed as they arrive
+        // A hairline draws across the top of each section as it arrives
         document.querySelectorAll('[data-sheet]').forEach(sheet => {
             addScrub(sheet, (rect, vh) => {
                 sheet.style.setProperty('--sheet', clamp((vh - rect.top) / (vh * 0.7)).toFixed(3));
@@ -629,6 +697,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             typeCharacter();
         };
+
+        if (motionOK) {
+            const firstRun = new IntersectionObserver(([entry]) => {
+                if (!entry.isIntersecting) return;
+                firstRun.disconnect();
+                selectTab(tabs.find(t => t.getAttribute('aria-selected') === 'true'));
+            }, { threshold: 0.35 });
+            firstRun.observe(document.querySelector('.terminal'));
+        }
 
         tabs.forEach((tab, index) => {
             tab.addEventListener('click', () => {

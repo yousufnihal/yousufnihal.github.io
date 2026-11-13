@@ -112,159 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
         heroEnter();
     }
 
-    /* ---------- Glyph field (hero only) ---------- */
-
-    // A dim grid of code glyphs. Characters near the pointer, or under a slow
-    // scan line that also runs on touch screens, heat up in the accent and scramble.
-    const startGlyphField = (canvas) => {
-        const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-
-        // Same accent as the stylesheet, so a palette change needs one edit
-        const neon = getComputedStyle(root).getPropertyValue('--neon-rgb').trim() || '61, 220, 151';
-        const glyphs = '0123456789ABCDEF<>/{}[]#$%&*+=;:!?';
-        const dim = [0, 0.05, 0.09, 0.16]; // Brightness levels; 0 leaves the cell empty
-        const pointer = { x: -1e4, y: -1e4 };
-        let width = 0;
-        let height = 0;
-        let size = 22;
-        let cols = 0;
-        let rows = 0;
-        let chars = new Uint8Array(0);
-        let level = new Uint8Array(0);
-        let heat = new Float32Array(0);
-        let scan = -400;
-
-        const randomGlyph = () => (Math.random() * glyphs.length) | 0;
-
-        const build = () => {
-            const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-            width = canvas.clientWidth;
-            height = canvas.clientHeight;
-            canvas.width = Math.round(width * dpr);
-            canvas.height = Math.round(height * dpr);
-            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-            size = width < 700 ? 18 : 22;
-            cols = Math.ceil(width / size);
-            rows = Math.ceil(height / size);
-            const n = cols * rows;
-            chars = new Uint8Array(n);
-            level = new Uint8Array(n);
-            heat = new Float32Array(n);
-            for (let i = 0; i < n; i++) {
-                chars[i] = randomGlyph();
-                const r = Math.random();
-                level[i] = r < 0.5 ? 0 : r < 0.85 ? 1 : r < 0.97 ? 2 : 3;
-            }
-        };
-
-        const draw = (animate) => {
-            const n = cols * rows;
-            const half = size / 2;
-            const radius = width < 700 ? 110 : 160;
-
-            if (animate) {
-                for (let k = 0; k < n * 0.006; k++) chars[(Math.random() * n) | 0] = randomGlyph();
-                scan += 2.2;
-                if (scan > height + 400) scan = -400;
-            }
-
-            // Heat decays each frame and is topped up by the pointer and the scan line
-            for (let i = 0; i < n; i++) {
-                const x = (i % cols) * size + half;
-                const y = ((i / cols) | 0) * size + half;
-                let h = heat[i] * 0.9;
-                const dx = x - pointer.x;
-                const dy = y - pointer.y;
-                const d2 = dx * dx + dy * dy;
-                if (d2 < radius * radius) h = Math.max(h, 1 - Math.sqrt(d2) / radius);
-                if (level[i]) {
-                    const ds = Math.abs(y - scan);
-                    if (ds < 60) h = Math.max(h, (1 - ds / 60) * 0.45);
-                }
-                heat[i] = h;
-                if (animate && h > 0.25 && Math.random() < h * 0.2) chars[i] = randomGlyph();
-            }
-
-            ctx.clearRect(0, 0, width, height);
-            ctx.font = `${Math.round(size * 0.58)}px "Geist Mono", ui-monospace, monospace`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            // Cold glyphs, one fill colour per brightness level
-            for (let l = 1; l < dim.length; l++) {
-                ctx.fillStyle = `rgba(200, 225, 215, ${dim[l]})`;
-                for (let i = 0; i < n; i++) {
-                    if (level[i] !== l || heat[i] > 0.12) continue;
-                    ctx.fillText(glyphs[chars[i]], (i % cols) * size + half, ((i / cols) | 0) * size + half);
-                }
-            }
-
-            // Hot glyphs in the accent
-            ctx.fillStyle = `rgb(${neon})`;
-            for (let i = 0; i < n; i++) {
-                const h = heat[i];
-                if (h <= 0.12) continue;
-                ctx.globalAlpha = Math.min(1, h * (level[i] ? 0.95 : 0.55));
-                ctx.fillText(glyphs[chars[i]], (i % cols) * size + half, ((i / cols) | 0) * size + half);
-            }
-            ctx.globalAlpha = 1;
-        };
-
-        build();
-
-        let resizeWidth = window.innerWidth;
-        window.addEventListener('resize', () => {
-            // Phone address bars fire resize while scrolling; only rebuild on a real width change
-            if (window.innerWidth === resizeWidth) return;
-            resizeWidth = window.innerWidth;
-            build();
-            if (!motionOK) draw(false);
-        }, { passive: true });
-
-        if (!motionOK) {
-            draw(false);
-            return;
-        }
-
-        if (canHover) {
-            canvas.parentElement.addEventListener('pointermove', (e) => {
-                const rect = canvas.getBoundingClientRect();
-                pointer.x = e.clientX - rect.left;
-                pointer.y = e.clientY - rect.top;
-            }, { passive: true });
-            canvas.parentElement.addEventListener('pointerleave', () => {
-                pointer.x = -1e4;
-                pointer.y = -1e4;
-            });
-        }
-
-        // Capped at 30fps, and fully stopped when off screen or in a background tab
-        let visible = true;
-        let last = 0;
-        let frame = 0;
-        const loop = (now) => {
-            frame = requestAnimationFrame(loop);
-            if (now - last < 33) return;
-            last = now;
-            draw(true);
-        };
-        const sync = () => {
-            cancelAnimationFrame(frame);
-            if (visible && !document.hidden) frame = requestAnimationFrame(loop);
-        };
-
-        new IntersectionObserver(([entry]) => {
-            visible = entry.isIntersecting;
-            sync();
-        }).observe(canvas);
-        document.addEventListener('visibilitychange', sync);
-    };
-
-    const netCanvas = document.getElementById('net');
-    if (netCanvas) startGlyphField(netCanvas);
-
     /* ---------- Scroll-linked motion ---------- */
 
     const scrubbers = new Map();
@@ -318,44 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Keyword bands slide in opposite directions as they cross the viewport
-        document.querySelectorAll('[data-ticker]').forEach(ticker => {
-            ticker.querySelectorAll('.ticker-row').forEach(row => {
-                // Repeat the phrase so the band never runs out of text at any width
-                const phrase = [...row.childNodes];
-                for (let copy = 0; copy < 3; copy++) phrase.forEach(node => row.append(node.cloneNode(true)));
-            });
-            addScrub(ticker, (rect, vh) => {
-                ticker.style.setProperty('--tp', clamp((vh - rect.top) / (vh + rect.height)).toFixed(4));
-            });
-        });
-
-        // Depth: section titles and marked images drift against the scroll.
-        // Distances are halved on small screens in the stylesheet (--px-k).
-        document.querySelectorAll('.sec .title, [data-parallax]').forEach(el => {
-            const depth = parseFloat(el.dataset.parallax || '36');
-            addScrub(el, (rect, vh) => {
-                const offset = (rect.top + rect.height / 2) / vh - 0.5;
-                el.style.setProperty('--py', `${(offset * depth).toFixed(1)}px`);
-            });
-        });
-
-        // The outlined footer name fills in as the page reaches its end
-        const footer = document.querySelector('.footer');
-        if (footer) {
-            addScrub(footer, (rect, vh) => {
-                footer.style.setProperty('--fp', `${(clamp((vh - rect.top) / rect.height) * 100).toFixed(1)}%`);
-            });
-        }
-
-        // Radar sweep behind the contact section only runs while it is on screen
-        const contact = document.getElementById('contact');
-        if (contact) {
-            new IntersectionObserver(([entry]) => {
-                contact.classList.toggle('in-view', entry.isIntersecting);
-            }).observe(contact);
-        }
-
         // A hairline draws across the top of each section as it arrives
         document.querySelectorAll('[data-sheet]').forEach(sheet => {
             addScrub(sheet, (rect, vh) => {
@@ -382,18 +191,10 @@ document.addEventListener('DOMContentLoaded', () => {
             [...group.children].forEach((child, i) => child.style.setProperty('--stagger', `${(i % 4) * 70}ms`));
         });
 
-        // Cards are uncovered by a scanning edge instead of a plain fade
-        document.querySelectorAll('.terminal.reveal, .tile.reveal, .form.reveal, .build.reveal, .advisory.reveal, .cert.reveal')
-            .forEach(el => el.classList.add('wipe'));
-
         const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('revealed');
-                    // Drop the wipe mask once it has finished so shadows and hovers render normally
-                    if (entry.target.classList.contains('wipe')) {
-                        setTimeout(() => entry.target.classList.add('wipe-done'), 1900);
-                    }
                     observer.unobserve(entry.target); // Reveal once
                 }
             });
@@ -417,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
             addScrub(timeline, (rect, vh) => {
                 const p = clamp((vh * 0.6 - rect.top) / rect.height);
                 timelineFill.style.transform = `scaleY(${p.toFixed(3)})`;
-                timeline.style.setProperty('--tl', p.toFixed(4)); // Packet rides the fill head
             });
         }
 
@@ -828,11 +628,9 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ---------- Highlight the current section in both navs ---------- */
 
     const spyLinks = document.querySelectorAll('[data-spy]');
-    const slPath = document.getElementById('sl-path');
     const spyObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
-            if (slPath) slPath.textContent = `~/${entry.target.id}`;
             spyLinks.forEach(link => {
                 if (link.dataset.spy === entry.target.id) {
                     link.setAttribute('aria-current', 'true');
@@ -1024,6 +822,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         .catch(() => { window.location.href = `mailto:${email}`; });
                 }
             },
+            { group: 'Actions', label: 'Toggle ambient sound', hint: 'off by default', icon: 'i-sound-on', run: () => { const b = document.getElementById('sound-toggle'); if (b && !b.hidden) b.click(); } },
             { group: 'Actions', label: 'Send an email', hint: 'mailto', icon: 'i-envelope-simple', run: () => { window.location.href = `mailto:${email}`; } },
             {
                 group: 'Actions', label: 'Open the interactive terminal', hint: 'about > terminal', icon: 'i-code',
@@ -1167,37 +966,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 openPalette();
             }
         });
-    }
-
-    /* ---------- Status line: scroll position and clock ---------- */
-
-    const slPct = document.getElementById('sl-pct');
-    const slClock = document.getElementById('sl-clock');
-    const statusWide = window.matchMedia('(min-width: 1024px)');
-
-    if (slPct && slClock) {
-        let slTicking = false;
-        const syncStatus = () => {
-            slTicking = false;
-            const max = document.documentElement.scrollHeight - window.innerHeight;
-            const pct = max > 0 ? Math.round((window.scrollY / max) * 100) : 0;
-            slPct.textContent = pct <= 0 ? 'TOP' : pct >= 100 ? 'BOT' : `${pct}%`;
-            if (slPath && window.scrollY < window.innerHeight * 0.4) slPath.textContent = '~';
-        };
-        window.addEventListener('scroll', () => {
-            if (slTicking) return;
-            slTicking = true;
-            requestAnimationFrame(syncStatus);
-        }, { passive: true });
-        syncStatus();
-
-        const tickClock = () => {
-            if (statusWide.matches && !document.hidden) {
-                slClock.textContent = new Date().toLocaleTimeString([], { hour12: false });
-            }
-        };
-        tickClock();
-        setInterval(tickClock, 1000);
     }
 
     requestUpdate();

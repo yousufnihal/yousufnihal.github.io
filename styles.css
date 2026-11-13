@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Cinematic console: near-black stage, one restrained accent, quiet glow
+   Minimal console: near-black stage, soft green with a little blue, quiet glow
    ========================================================================== */
 
 :root {
@@ -58,7 +58,7 @@ html {
 body {
     position: relative;
     color: var(--fg);
-    /* The page colour lives on <html> so the fixed story canvas can show through */
+    /* The page colour lives on <html> so the fixed background scene can show through */
     background: transparent;
     font-family: var(--font-sans);
     font-size: 1rem;
@@ -638,7 +638,7 @@ main > .sec {
     inset: auto 0 0;
     height: 30%;
     z-index: -1;
-    background: linear-gradient(transparent, rgba(5, 6, 7, 0.55));
+    background: linear-gradient(transparent, rgba(5, 6, 7, 0.5));
 }
 
 /* Digital grid, fading away from the portrait side */
@@ -661,7 +661,7 @@ main > .sec {
     z-index: -1;
     width: 100%;
     height: 100%;
-    opacity: 0.6;
+    opacity: 0.45;
     -webkit-mask-image: linear-gradient(100deg, rgba(0, 0, 0, 0.15) 25%, #000 70%);
     mask-image: linear-gradient(100deg, rgba(0, 0, 0, 0.15) 25%, #000 70%);
 }
@@ -2147,7 +2147,7 @@ main > .sec {
     padding-block: clamp(72px, 10vw, 140px);
     background:
         radial-gradient(60% 70% at 85% 0%, rgba(var(--neon-rgb), 0.07), transparent 70%),
-        linear-gradient(180deg, rgba(11, 14, 16, 0.55), rgba(5, 6, 7, 0.75));
+        linear-gradient(180deg, var(--charcoal), var(--black));
     border-top: 1px solid var(--line);
 }
 
@@ -3047,39 +3047,9 @@ kbd {
     transform: none;
 }
 
-/* Status line: large screens only */
-.statusline {
-    display: none;
-}
-
-/* HUD reticle: corner brackets lock onto a card on hover */
-.tile::before {
-    content: '';
-    position: absolute;
-    inset: 10px;
-    z-index: 4;
-    pointer-events: none;
-    --b: rgba(var(--neon-rgb), 0.75);
-    --s: 14px;
-    background:
-        linear-gradient(var(--b), var(--b)) 0 0 / var(--s) 1px,
-        linear-gradient(var(--b), var(--b)) 0 0 / 1px var(--s),
-        linear-gradient(var(--b), var(--b)) 100% 0 / var(--s) 1px,
-        linear-gradient(var(--b), var(--b)) 100% 0 / 1px var(--s),
-        linear-gradient(var(--b), var(--b)) 0 100% / var(--s) 1px,
-        linear-gradient(var(--b), var(--b)) 0 100% / 1px var(--s),
-        linear-gradient(var(--b), var(--b)) 100% 100% / var(--s) 1px,
-        linear-gradient(var(--b), var(--b)) 100% 100% / 1px var(--s);
-    background-repeat: no-repeat;
-    opacity: 0;
-    transform: scale(1.04);
-    transition: opacity 0.3s, transform 0.5s var(--ease);
-}
-
 @media (hover: hover) {
     .cmdk:hover { color: var(--fg); border-color: var(--neon-line); }
     .palette-esc:hover { color: var(--fg); }
-    .tile:hover::before { opacity: 1; transform: none; }
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -3093,264 +3063,71 @@ kbd {
 }
 
 @media (min-width: 1024px) {
-    .toast { bottom: 52px; }
-
-    .hero { padding-bottom: 28px; }
-    .footer { padding-bottom: 60px; }
-
-    .statusline {
-        position: fixed;
-        inset: auto 0 0;
-        z-index: 120;
-        display: flex;
-        align-items: stretch;
-        height: 28px;
-        font-family: var(--font-mono);
-        font-size: 0.6875rem;
-        line-height: 28px;
-        color: var(--fg-3);
-        background: rgba(5, 6, 7, 0.82);
-        -webkit-backdrop-filter: blur(12px);
-        backdrop-filter: blur(12px);
-        border-top: 1px solid var(--line);
-    }
-
-    .motion .statusline {
-        transform: translateY(100%);
-        transition: transform 0.9s 0.8s var(--ease);
-    }
-
-    .motion.ready .statusline {
-        transform: none;
-    }
-
-    .statusline > span {
-        padding-inline: 14px;
-        white-space: nowrap;
-    }
-
-    .statusline > span + span:not(.sl-fill, .sl-prompt) {
-        border-left: 1px solid var(--line);
-    }
-
-    .sl-mode {
-        font-weight: 500;
-        letter-spacing: 0.08em;
-        color: #03130b;
-        background: var(--neon);
-    }
-
-    .sl-mode::before {
-        content: '\25CF  ';
-    }
-
-    .sl-prompt {
-        color: var(--fg-2);
-    }
-
-    .sl-prompt b {
-        font-weight: 500;
-        color: var(--neon);
-    }
-
-    .sl-fill {
-        flex: 1;
-    }
-
-    .sl-hint kbd {
-        margin-right: 3px;
-        font-size: 0.625rem;
-        line-height: 1.4;
-    }
-
-    #sl-pct {
-        min-width: 6ch;
-        text-align: center;
-    }
-
-    #sl-clock {
-        color: var(--fg-2);
-        font-variant-numeric: tabular-nums;
-    }
+    .toast { bottom: 32px; }
 }
 
 /* ==========================================================================
-   Scroll cinema: wipes, tickers, parallax, letterbox, radar, end card.
-   Everything here only moves transform/opacity/mask, is driven by
-   script.js while on screen, and is inert without the .motion class.
+   Soft blue: a second, cooler highlight used only in small touches,
+   so green stays the main accent
    ========================================================================== */
 
 :root {
-    --px-k: 1; /* Parallax strength; halved on phones below */
+    --blue-rgb: 110, 168, 255;
+    --blue: rgb(var(--blue-rgb));
 }
 
-/* Scanning-edge reveal: the card is uncovered top to bottom */
-@property --wipe {
-    syntax: '<percentage>';
-    inherits: false;
-    initial-value: 130%;
+.sec .kicker::before,
+.hero-hi::before {
+    color: var(--blue);
 }
 
-.motion .wipe.reveal:not(.wipe-done) {
-    -webkit-mask-image: linear-gradient(180deg, #000 calc(var(--wipe) - 24%), rgba(0, 0, 0, 0.35) calc(var(--wipe) - 6%), transparent var(--wipe));
-    mask-image: linear-gradient(180deg, #000 calc(var(--wipe) - 24%), rgba(0, 0, 0, 0.35) calc(var(--wipe) - 6%), transparent var(--wipe));
-}
-
-.motion .wipe.reveal {
-    transition:
-        opacity 0.9s var(--ease),
-        transform 1s var(--ease),
-        filter 0.9s var(--ease),
-        --wipe 1.4s var(--ease-film);
-    transition-delay: var(--stagger, 0ms);
-}
-
-.motion .wipe.reveal:not(.revealed) {
-    --wipe: 0%;
-}
-
-/* Depth parallax (offset set as --py in script.js) */
-.motion .sec .title,
-.motion [data-parallax] {
-    translate: 0 calc(var(--py, 0px) * var(--px-k));
-}
-
-.motion .tile-htb img {
-    scale: 1.14;
-}
-
-/* Hero: scroll cue */
-.scroll-cue {
-    display: none;
-}
-
-/* Keyword bands */
-.ticker {
-    position: relative;
-    overflow: hidden;
-    padding-block: clamp(28px, 5vw, 56px);
-    border-block: 1px solid var(--line);
-    -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-    mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-}
-
-.ticker-end {
-    margin-top: var(--sec-space);
-}
-
-.ticker-end + .contact {
-    margin-top: 0;
-    border-top: 0;
-}
-
-.ticker-row {
-    display: flex;
-    align-items: center;
-    width: max-content;
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(2.25rem, 7.5vw, 6rem);
-    letter-spacing: -0.045em;
-    line-height: 1.05;
-    white-space: nowrap;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--line-strong);
-}
-
-.ticker-row span {
-    padding-inline: 0.3em;
-}
-
-.ticker-row .hot {
-    color: var(--fg);
-    -webkit-text-stroke: 0;
-}
-
-.ticker-row i {
-    font-style: normal;
-    font-weight: 400;
-    color: var(--neon);
-    -webkit-text-stroke: 0;
-    text-shadow: 0 0 18px rgba(var(--neon-rgb), 0.5);
-}
-
-.ticker-row-2 {
-    margin-top: clamp(10px, 2vw, 18px);
-    font-family: var(--font-mono);
-    font-weight: 400;
-    font-size: clamp(0.6875rem, 1.5vw, 0.9375rem);
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--fg-3);
-    -webkit-text-stroke: 0;
-}
-
-.ticker-row-2 span {
-    padding-inline: 0.9em;
-}
-
-.motion .ticker-row {
-    translate: calc(var(--tp, 0.5) * -22%) 0;
-}
-
-.motion .ticker-row-2 {
-    translate: calc(-22% + var(--tp, 0.5) * 22%) 0;
-}
-
-/* Experience: a glowing packet rides the head of the rail fill */
-.motion .tl-rail::after {
-    content: '';
-    position: absolute;
-    left: -3px;
-    top: calc(var(--tl, 0) * 100%);
-    width: 7px;
-    height: 7px;
-    margin-top: -3.5px;
-    border-radius: 50%;
-    background: var(--neon);
-    box-shadow: 0 0 6px var(--neon), 0 0 18px rgba(var(--neon-rgb), 0.7);
-}
-
-/* Contact: a slow radar sweep behind the section */
-.contact {
-    overflow: clip;
-    isolation: isolate;
-}
-
-.contact::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: -18%;
-    z-index: -1;
-    width: min(140vw, 900px);
-    aspect-ratio: 1;
-    margin-top: calc(min(140vw, 900px) / -2);
-    pointer-events: none;
-    border-radius: 50%;
-    opacity: 0.55;
+.hero::before {
     background:
-        conic-gradient(from 0deg, rgba(var(--neon-rgb), 0.16), rgba(var(--neon-rgb), 0) 55deg, transparent 360deg),
-        repeating-radial-gradient(circle, transparent 0 79px, rgba(var(--neon-rgb), 0.08) 79px 80px),
-        linear-gradient(rgba(var(--neon-rgb), 0.06), rgba(var(--neon-rgb), 0.06)) 50% 0 / 1px 100% no-repeat,
-        linear-gradient(rgba(var(--neon-rgb), 0.06), rgba(var(--neon-rgb), 0.06)) 0 50% / 100% 1px no-repeat;
-    -webkit-mask-image: radial-gradient(circle, #000 35%, transparent 70%);
-    mask-image: radial-gradient(circle, #000 35%, transparent 70%);
+        radial-gradient(45% 55% at 72% 38%, rgba(var(--neon-rgb), 0.07), transparent 70%),
+        radial-gradient(45% 55% at 18% 18%, rgba(var(--blue-rgb), 0.07), transparent 70%);
 }
 
-.motion .contact::after {
-    animation: radar 9s linear infinite;
-    animation-play-state: paused;
+.progress {
+    background: linear-gradient(90deg, var(--neon), var(--blue));
 }
 
-.motion .contact.in-view::after {
-    animation-play-state: running;
+.tl-rail span {
+    background: linear-gradient(180deg, var(--neon), rgba(var(--blue-rgb), 0.5));
 }
 
-@keyframes radar {
-    to { transform: rotate(360deg); }
+.contact {
+    background:
+        radial-gradient(60% 70% at 85% 0%, rgba(var(--blue-rgb), 0.06), transparent 70%),
+        linear-gradient(180deg, var(--charcoal), var(--black));
 }
 
+.role-list li::before,
+.term-list dt {
+    color: rgba(var(--blue-rgb), 0.85);
+}
+
+@media (hover: hover) {
+    .btn-ghost:hover,
+    .socials a:hover {
+        color: var(--blue);
+        border-color: rgba(var(--blue-rgb), 0.4);
+        box-shadow: none;
+    }
+
+    .text-link:hover {
+        color: var(--blue);
+    }
+}
+
+@media (min-width: 1024px) {
+    .tl-year {
+        background: linear-gradient(180deg, var(--neon), rgba(var(--blue-rgb), 0.55));
+        -webkit-background-clip: text;
+        background-clip: text;
+    }
+}
+
+/* Typed status line above the contact form */
 .form-banner {
     min-height: 1.5em;
     margin-bottom: -4px;
@@ -3361,101 +3138,17 @@ kbd {
     overflow-wrap: anywhere;
 }
 
-/* Footer: the outlined name is "decrypted" left to right (--fp) */
-.motion .footer-name {
-    background: linear-gradient(90deg, rgba(var(--neon-rgb), 0.22) var(--fp, 0%), transparent var(--fp, 0%));
-    -webkit-background-clip: text;
-    background-clip: text;
-}
-
-/* Phones: lighter effects for smooth scrolling */
+/* Phones: fade and rise only; blur is the costliest part of a reveal */
 @media (max-width: 767px) {
-    :root { --px-k: 0.5; }
-
-    /* Blur is the most expensive part of a reveal; phones get fade and rise only */
     .motion .reveal:not(.title, .kicker),
     .motion [data-hero] {
         filter: none;
     }
-
-    .contact::after {
-        top: 0;
-        right: -50%;
-        margin-top: -30%;
-        opacity: 0.4;
-    }
-
-    .ticker-row .hot {
-        color: var(--fg-2);
-    }
-}
-
-/* Large screens: letterbox exit and scroll cue */
-@media (min-width: 1024px) {
-    /* Film bars close over the hero as the page scrolls away from it */
-    .motion .hero-stage {
-        clip-path: inset(calc(var(--hero-p, 0) * 16%) 0 calc(var(--hero-p, 0) * 16%) 0);
-    }
-
-    .scroll-cue {
-        position: absolute;
-        left: max(20px, calc((100% - 1280px) / 2 - 24px));
-        bottom: 84px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 14px;
-        font-family: var(--font-mono);
-        font-size: 0.625rem;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--fg-3);
-        transition: color 0.3s;
-    }
-
-    .scroll-cue span {
-        writing-mode: vertical-rl;
-        transform: rotate(180deg);
-    }
-
-    .scroll-cue i {
-        position: relative;
-        width: 1px;
-        height: 56px;
-        overflow: hidden;
-        background: var(--line);
-    }
-
-    .scroll-cue i::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(transparent, var(--neon));
-        transform: translateY(-100%);
-    }
-
-    .motion .scroll-cue i::after {
-        animation: cue 2.2s var(--ease-film) infinite;
-    }
-
-    .scroll-cue:hover {
-        color: var(--neon);
-    }
-}
-
-@keyframes cue {
-    0% { transform: translateY(-100%); }
-    60%, 100% { transform: translateY(100%); }
-}
-
-/* Laptops narrower than the content max width: keep the cue clear of text */
-@media (min-width: 1024px) and (max-width: 1340px) {
-    .scroll-cue { display: none; }
 }
 
 /* ==========================================================================
-   Background story (ops-scene.js): fixed canvas behind everything, with a
-   scrim that keeps every line of content readable over it.
+   Background scene (ops-scene.js): fixed behind everything, with a scrim
+   that keeps every line of content readable over it
    ========================================================================== */
 
 .ops {
@@ -3478,82 +3171,94 @@ kbd {
 }
 
 .ready .ops canvas {
-    opacity: 0.9;
+    opacity: 0.85;
 }
 
-/* Darker where text sits (left on desktop), lighter where the scene focuses */
+/* Darkest where text sits (left on large screens), lighter over the scene */
 .ops::after {
     content: '';
     position: absolute;
     inset: 0;
     background:
-        linear-gradient(90deg, rgba(5, 6, 7, 0.9) 0%, rgba(5, 6, 7, 0.74) 36%, rgba(5, 6, 7, 0.34) 72%, rgba(5, 6, 7, 0.5) 100%),
-        radial-gradient(120% 95% at 63% 50%, transparent 45%, rgba(5, 6, 7, 0.8) 100%);
+        linear-gradient(90deg, rgba(5, 6, 7, 0.92) 0%, rgba(5, 6, 7, 0.74) 38%, rgba(5, 6, 7, 0.3) 72%, rgba(5, 6, 7, 0.5) 100%),
+        radial-gradient(120% 95% at 64% 50%, transparent 45%, rgba(5, 6, 7, 0.8) 100%);
 }
 
-/* Stage readout in the status line */
-.sl-op {
-    color: rgb(var(--op-rgb, var(--neon-rgb)));
-    letter-spacing: 0.04em;
-    transition: color 0.8s;
-}
-
-/* Phones and tablets: a small stage chip instead of the status line */
-.ops-chip {
-    position: fixed;
-    top: calc(10px + env(safe-area-inset-top));
-    left: 50%;
-    z-index: 90;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    max-width: calc(100% - 32px);
-    padding: 6px 12px;
-    font-family: var(--font-mono);
-    font-size: 0.625rem;
-    letter-spacing: 0.06em;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--fg-2);
-    background: rgba(10, 13, 15, 0.8);
-    -webkit-backdrop-filter: blur(12px);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--line-strong);
-    border-radius: 999px;
-    translate: -50% 0;
-    opacity: 0;
-    transform: translateY(-8px);
-    pointer-events: none;
-    transition: opacity 0.5s, transform 0.6s var(--ease);
-}
-
-.ops-chip.is-on {
-    opacity: 1;
-    transform: none;
-}
-
-.ops-chip i {
-    flex: none;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: rgb(var(--op-rgb, var(--neon-rgb)));
-    box-shadow: 0 0 8px rgb(var(--op-rgb, var(--neon-rgb)));
-    transition: background-color 0.8s, box-shadow 0.8s;
+/* Contact keeps its tint but lets the scene through */
+.contact {
+    background:
+        radial-gradient(60% 70% at 85% 0%, rgba(var(--blue-rgb), 0.06), transparent 70%),
+        linear-gradient(180deg, rgba(11, 14, 16, 0.6), rgba(5, 6, 7, 0.8));
 }
 
 @media (max-width: 767px) {
-    /* The room sits in a band near the top; content below gets a heavier scrim */
+    /* The scene sits in a band near the top; content below gets a heavier scrim */
     .ops::after {
-        background: linear-gradient(180deg, rgba(5, 6, 7, 0.45) 0%, rgba(5, 6, 7, 0.62) 40%, rgba(5, 6, 7, 0.86) 70%, rgba(5, 6, 7, 0.92) 100%);
+        background: linear-gradient(180deg, rgba(5, 6, 7, 0.45) 0%, rgba(5, 6, 7, 0.65) 40%, rgba(5, 6, 7, 0.88) 70%, rgba(5, 6, 7, 0.93) 100%);
     }
 
     .ready .ops canvas {
-        opacity: 0.8;
+        opacity: 0.75;
     }
 }
 
-@media (min-width: 1024px) {
-    .ops-chip { display: none; }
+/* ==========================================================================
+   Sound toggle (ambience.js): small, fixed, off by default
+   ========================================================================== */
+
+.sound-toggle {
+    position: fixed;
+    right: 14px;
+    bottom: calc(84px + env(safe-area-inset-bottom));
+    z-index: 110;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 44px;
+    height: 44px;
+    padding-inline: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    color: var(--fg-3);
+    background: rgba(10, 13, 15, 0.82);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    transition: color 0.3s, border-color 0.3s, opacity 0.8s 1s;
 }
+
+.sound-toggle .i {
+    font-size: 1.1rem;
+}
+
+.sound-toggle[aria-pressed="true"] {
+    color: var(--neon);
+    border-color: var(--neon-line);
+}
+
+.sound-label {
+    display: none;
+}
+
+.motion:not(.ready) .sound-toggle {
+    opacity: 0;
+}
+
+@media (hover: hover) {
+    .sound-toggle:hover { color: var(--fg); border-color: var(--neon-line); }
+}
+
+@media (min-width: 1024px) {
+    .sound-toggle {
+        right: 24px;
+        bottom: 24px;
+    }
+
+    .sound-label {
+        display: inline;
+    }
+}
+

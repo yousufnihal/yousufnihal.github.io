@@ -112,19 +112,30 @@ document.addEventListener('DOMContentLoaded', () => {
         heroEnter();
     }
 
-    /* ---------- Network nodes (hero only) ---------- */
+    /* ---------- Glyph field (hero only) ---------- */
 
-    const startNetwork = (canvas) => {
+    // A dim grid of code glyphs. Characters near the pointer, or under a slow
+    // scan line that also runs on touch screens, heat up in the accent and scramble.
+    const startGlyphField = (canvas) => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        const neon = '57, 255, 154';
-        const pointer = { x: -1000, y: -1000 };
-        let nodes = [];
-        let packets = [];
+        // Same accent as the stylesheet, so a palette change needs one edit
+        const neon = getComputedStyle(root).getPropertyValue('--neon-rgb').trim() || '61, 220, 151';
+        const glyphs = '0123456789ABCDEF<>/{}[]#$%&*+=;:!?';
+        const dim = [0, 0.05, 0.09, 0.16]; // Brightness levels; 0 leaves the cell empty
+        const pointer = { x: -1e4, y: -1e4 };
         let width = 0;
         let height = 0;
-        let linkDistance = 120;
+        let size = 22;
+        let cols = 0;
+        let rows = 0;
+        let chars = new Uint8Array(0);
+        let level = new Uint8Array(0);
+        let heat = new Float32Array(0);
+        let scan = -400;
+
+        const randomGlyph = () => (Math.random() * glyphs.length) | 0;
 
         const build = () => {
             const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -133,90 +144,72 @@ document.addEventListener('DOMContentLoaded', () => {
             canvas.width = Math.round(width * dpr);
             canvas.height = Math.round(height * dpr);
             ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-            linkDistance = width < 700 ? 96 : 136;
 
-            // Node count follows area and is capped, since links are checked pair by pair
-            const count = Math.max(22, Math.min(64, Math.round((width * height) / 19000)));
-            nodes = Array.from({ length: count }, () => ({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.28,
-                vy: (Math.random() - 0.5) * 0.28
-            }));
-            packets = Array.from({ length: 4 }, () => ({ from: null, to: null, t: 1 }));
+            size = width < 700 ? 18 : 22;
+            cols = Math.ceil(width / size);
+            rows = Math.ceil(height / size);
+            const n = cols * rows;
+            chars = new Uint8Array(n);
+            level = new Uint8Array(n);
+            heat = new Float32Array(n);
+            for (let i = 0; i < n; i++) {
+                chars[i] = randomGlyph();
+                const r = Math.random();
+                level[i] = r < 0.5 ? 0 : r < 0.85 ? 1 : r < 0.97 ? 2 : 3;
+            }
         };
 
-        const nearestTo = (node) => {
-            let best = null;
-            let bestDistance = linkDistance * linkDistance;
-            nodes.forEach(other => {
-                if (other === node) return;
-                const d = (other.x - node.x) ** 2 + (other.y - node.y) ** 2;
-                if (d < bestDistance && Math.random() > 0.3) {
-                    best = other;
-                    bestDistance = d;
+        const draw = (animate) => {
+            const n = cols * rows;
+            const half = size / 2;
+            const radius = width < 700 ? 110 : 160;
+
+            if (animate) {
+                for (let k = 0; k < n * 0.006; k++) chars[(Math.random() * n) | 0] = randomGlyph();
+                scan += 2.2;
+                if (scan > height + 400) scan = -400;
+            }
+
+            // Heat decays each frame and is topped up by the pointer and the scan line
+            for (let i = 0; i < n; i++) {
+                const x = (i % cols) * size + half;
+                const y = ((i / cols) | 0) * size + half;
+                let h = heat[i] * 0.9;
+                const dx = x - pointer.x;
+                const dy = y - pointer.y;
+                const d2 = dx * dx + dy * dy;
+                if (d2 < radius * radius) h = Math.max(h, 1 - Math.sqrt(d2) / radius);
+                if (level[i]) {
+                    const ds = Math.abs(y - scan);
+                    if (ds < 60) h = Math.max(h, (1 - ds / 60) * 0.45);
                 }
-            });
-            return best;
-        };
+                heat[i] = h;
+                if (animate && h > 0.25 && Math.random() < h * 0.2) chars[i] = randomGlyph();
+            }
 
-        const draw = () => {
             ctx.clearRect(0, 0, width, height);
-            const maxSq = linkDistance * linkDistance;
+            ctx.font = `${Math.round(size * 0.58)}px "Geist Mono", ui-monospace, monospace`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
 
-            nodes.forEach(n => {
-                n.x += n.vx;
-                n.y += n.vy;
-                if (n.x < 0 || n.x > width) n.vx *= -1;
-                if (n.y < 0 || n.y > height) n.vy *= -1;
-            });
-
-            // Links grouped by strength so each group is one stroke call
-            const faint = new Path2D();
-            const strong = new Path2D();
-            for (let i = 0; i < nodes.length; i++) {
-                const a = nodes[i];
-                for (let j = i + 1; j < nodes.length; j++) {
-                    const b = nodes[j];
-                    const d = (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
-                    if (d < maxSq) {
-                        const path = d < maxSq * 0.35 ? strong : faint;
-                        path.moveTo(a.x, a.y);
-                        path.lineTo(b.x, b.y);
-                    }
-                }
-                if ((a.x - pointer.x) ** 2 + (a.y - pointer.y) ** 2 < maxSq * 1.6) {
-                    strong.moveTo(a.x, a.y);
-                    strong.lineTo(pointer.x, pointer.y);
+            // Cold glyphs, one fill colour per brightness level
+            for (let l = 1; l < dim.length; l++) {
+                ctx.fillStyle = `rgba(200, 225, 215, ${dim[l]})`;
+                for (let i = 0; i < n; i++) {
+                    if (level[i] !== l || heat[i] > 0.12) continue;
+                    ctx.fillText(glyphs[chars[i]], (i % cols) * size + half, ((i / cols) | 0) * size + half);
                 }
             }
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = `rgba(${neon}, 0.07)`;
-            ctx.stroke(faint);
-            ctx.strokeStyle = `rgba(${neon}, 0.16)`;
-            ctx.stroke(strong);
 
-            ctx.fillStyle = `rgba(${neon}, 0.5)`;
-            nodes.forEach(n => ctx.fillRect(n.x - 1.25, n.y - 1.25, 2.5, 2.5));
-
-            // Data packets hop between linked nodes
+            // Hot glyphs in the accent
             ctx.fillStyle = `rgb(${neon})`;
-            packets.forEach(p => {
-                if (p.t >= 1) {
-                    p.from = p.to || nodes[Math.floor(Math.random() * nodes.length)];
-                    p.to = nearestTo(p.from);
-                    p.t = 0;
-                    if (!p.to) {
-                        p.t = 1;
-                        p.to = null;
-                        return;
-                    }
-                }
-                p.t = Math.min(1, p.t + 0.035);
-                const x = p.from.x + (p.to.x - p.from.x) * p.t;
-                const y = p.from.y + (p.to.y - p.from.y) * p.t;
-                ctx.fillRect(x - 1.5, y - 1.5, 3, 3);
-            });
+            for (let i = 0; i < n; i++) {
+                const h = heat[i];
+                if (h <= 0.12) continue;
+                ctx.globalAlpha = Math.min(1, h * (level[i] ? 0.95 : 0.55));
+                ctx.fillText(glyphs[chars[i]], (i % cols) * size + half, ((i / cols) | 0) * size + half);
+            }
+            ctx.globalAlpha = 1;
         };
 
         build();
@@ -227,11 +220,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.innerWidth === resizeWidth) return;
             resizeWidth = window.innerWidth;
             build();
-            if (!motionOK) draw();
+            if (!motionOK) draw(false);
         }, { passive: true });
 
         if (!motionOK) {
-            draw();
+            draw(false);
             return;
         }
 
@@ -242,8 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 pointer.y = e.clientY - rect.top;
             }, { passive: true });
             canvas.parentElement.addEventListener('pointerleave', () => {
-                pointer.x = -1000;
-                pointer.y = -1000;
+                pointer.x = -1e4;
+                pointer.y = -1e4;
             });
         }
 
@@ -255,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             frame = requestAnimationFrame(loop);
             if (now - last < 33) return;
             last = now;
-            draw();
+            draw(true);
         };
         const sync = () => {
             cancelAnimationFrame(frame);
@@ -270,7 +263,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const netCanvas = document.getElementById('net');
-    if (netCanvas) startNetwork(netCanvas);
+    if (netCanvas) startGlyphField(netCanvas);
 
     /* ---------- Scroll-linked motion ---------- */
 
@@ -317,12 +310,67 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        // Hero copy drifts and fades as the page scrolls away from it
+        const hero = document.querySelector('.hero');
+        if (hero) {
+            addScrub(hero, (rect) => {
+                hero.style.setProperty('--hero-p', clamp(-rect.top / rect.height).toFixed(3));
+            });
+        }
+
+        // Keyword bands slide in opposite directions as they cross the viewport
+        document.querySelectorAll('[data-ticker]').forEach(ticker => {
+            ticker.querySelectorAll('.ticker-row').forEach(row => {
+                // Repeat the phrase so the band never runs out of text at any width
+                const phrase = [...row.childNodes];
+                for (let copy = 0; copy < 3; copy++) phrase.forEach(node => row.append(node.cloneNode(true)));
+            });
+            addScrub(ticker, (rect, vh) => {
+                ticker.style.setProperty('--tp', clamp((vh - rect.top) / (vh + rect.height)).toFixed(4));
+            });
+        });
+
+        // Depth: section titles and marked images drift against the scroll.
+        // Distances are halved on small screens in the stylesheet (--px-k).
+        document.querySelectorAll('.sec .title, [data-parallax]').forEach(el => {
+            const depth = parseFloat(el.dataset.parallax || '36');
+            addScrub(el, (rect, vh) => {
+                const offset = (rect.top + rect.height / 2) / vh - 0.5;
+                el.style.setProperty('--py', `${(offset * depth).toFixed(1)}px`);
+            });
+        });
+
+        // The outlined footer name fills in as the page reaches its end
+        const footer = document.querySelector('.footer');
+        if (footer) {
+            addScrub(footer, (rect, vh) => {
+                footer.style.setProperty('--fp', `${(clamp((vh - rect.top) / rect.height) * 100).toFixed(1)}%`);
+            });
+        }
+
+        // Radar sweep behind the contact section only runs while it is on screen
+        const contact = document.getElementById('contact');
+        if (contact) {
+            new IntersectionObserver(([entry]) => {
+                contact.classList.toggle('in-view', entry.isIntersecting);
+            }).observe(contact);
+        }
+
         // A hairline draws across the top of each section as it arrives
         document.querySelectorAll('[data-sheet]').forEach(sheet => {
             addScrub(sheet, (rect, vh) => {
                 sheet.style.setProperty('--sheet', clamp((vh - rect.top) / (vh * 0.7)).toFixed(3));
             });
         });
+    }
+
+    /* ---------- Top bar turns to glass once the page scrolls ---------- */
+
+    const topbar = document.querySelector('.topbar');
+    if (topbar) {
+        const syncTopbar = () => topbar.classList.toggle('is-scrolled', window.scrollY > 24);
+        window.addEventListener('scroll', syncTopbar, { passive: true });
+        syncTopbar();
     }
 
     /* ---------- Reveals ---------- */
@@ -334,10 +382,18 @@ document.addEventListener('DOMContentLoaded', () => {
             [...group.children].forEach((child, i) => child.style.setProperty('--stagger', `${(i % 4) * 70}ms`));
         });
 
+        // Cards are uncovered by a scanning edge instead of a plain fade
+        document.querySelectorAll('.terminal.reveal, .tile.reveal, .form.reveal, .build.reveal, .advisory.reveal, .cert.reveal')
+            .forEach(el => el.classList.add('wipe'));
+
         const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('revealed');
+                    // Drop the wipe mask once it has finished so shadows and hovers render normally
+                    if (entry.target.classList.contains('wipe')) {
+                        setTimeout(() => entry.target.classList.add('wipe-done'), 1900);
+                    }
                     observer.unobserve(entry.target); // Reveal once
                 }
             });
@@ -361,6 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addScrub(timeline, (rect, vh) => {
                 const p = clamp((vh * 0.6 - rect.top) / rect.height);
                 timelineFill.style.transform = `scaleY(${p.toFixed(3)})`;
+                timeline.style.setProperty('--tl', p.toFixed(4)); // Packet rides the fill head
             });
         }
 
@@ -771,9 +828,11 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ---------- Highlight the current section in both navs ---------- */
 
     const spyLinks = document.querySelectorAll('[data-spy]');
+    const slPath = document.getElementById('sl-path');
     const spyObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
+            if (slPath) slPath.textContent = `~/${entry.target.id}`;
             spyLinks.forEach(link => {
                 if (link.dataset.spy === entry.target.id) {
                     link.setAttribute('aria-current', 'true');
@@ -863,6 +922,282 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.disabled = false;
             });
         });
+    }
+
+    /* ---------- Hero role retypes itself through a few specialisms ---------- */
+
+    const cycler = document.querySelector('[data-cycle]');
+    if (cycler && motionOK) {
+        const words = cycler.dataset.cycle.split('|');
+        const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+        let index = 0;
+
+        (async () => {
+            await wait(3600);
+            for (;;) {
+                if (document.hidden) {
+                    await wait(1000);
+                    continue;
+                }
+                const current = cycler.textContent;
+                for (let i = current.length; i >= 0; i--) {
+                    cycler.textContent = current.slice(0, i);
+                    await wait(26);
+                }
+                index = (index + 1) % words.length;
+                await wait(240);
+                const next = words[index];
+                for (let i = 1; i <= next.length; i++) {
+                    cycler.textContent = next.slice(0, i);
+                    await wait(55);
+                }
+                await wait(2800);
+            }
+        })();
+    }
+
+    /* ---------- Status lines that type themselves when reached ---------- */
+
+    document.querySelectorAll('[data-typeline]').forEach(line => {
+        if (!motionOK) return;
+        const text = line.dataset.typeline;
+        line.textContent = '';
+        new IntersectionObserver(([entry], observer) => {
+            if (!entry.isIntersecting) return;
+            observer.disconnect();
+            let i = 0;
+            const step = () => {
+                line.textContent = text.slice(0, ++i);
+                if (i < text.length) setTimeout(step, 28);
+            };
+            setTimeout(step, 500);
+        }, { threshold: 0.6 }).observe(line);
+    });
+
+    /* ---------- Toast ---------- */
+
+    const toast = document.getElementById('toast');
+    let toastTimer = 0;
+    const showToast = (text) => {
+        if (!toast) return;
+        toast.textContent = text;
+        toast.classList.add('is-on');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove('is-on'), 2400);
+    };
+
+    /* ---------- Command palette ---------- */
+
+    const palette = document.getElementById('palette');
+    const paletteInput = document.getElementById('palette-input');
+    const paletteList = document.getElementById('palette-list');
+    const paletteOpen = document.getElementById('palette-open');
+    const paletteClose = document.getElementById('palette-close');
+
+    if (palette && paletteInput && paletteList) {
+        const isMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+        const cmdkKey = document.getElementById('cmdk-key');
+        if (cmdkKey && isMac) cmdkKey.textContent = '⌘K';
+
+        const email = 'yousufnihal01@gmail.com';
+        const go = (id) => document.getElementById(id).scrollIntoView({ behavior: motionOK ? 'smooth' : 'auto' });
+        const openTab = (href) => window.open(href, '_blank', 'noopener,noreferrer');
+
+        const sectionNames = {
+            about: 'About', skills: 'Skills', experience: 'Experience', credentials: 'Certifications',
+            honors: 'Honors', recommendations: 'Recommendations', writeups: 'Writeups', projects: 'Projects', contact: 'Contact'
+        };
+
+        const items = [
+            ...Object.entries(sectionNames).map(([id, name]) => ({
+                group: 'Navigate', label: `Go to ${name}`, hint: `cd ~/${id}`, icon: 'i-arrow-right', run: () => go(id)
+            })),
+            {
+                group: 'Actions', label: 'Copy email address', hint: email, icon: 'i-copy',
+                run: () => {
+                    if (!navigator.clipboard) {
+                        window.location.href = `mailto:${email}`;
+                        return;
+                    }
+                    navigator.clipboard.writeText(email)
+                        .then(() => showToast('[ok] email copied to clipboard'))
+                        .catch(() => { window.location.href = `mailto:${email}`; });
+                }
+            },
+            { group: 'Actions', label: 'Send an email', hint: 'mailto', icon: 'i-envelope-simple', run: () => { window.location.href = `mailto:${email}`; } },
+            {
+                group: 'Actions', label: 'Open the interactive terminal', hint: 'about > terminal', icon: 'i-code',
+                run: () => {
+                    go('about');
+                    const input = document.getElementById('term-input');
+                    if (input) setTimeout(() => input.focus({ preventScroll: true }), motionOK ? 900 : 0);
+                }
+            },
+            { group: 'Links', label: 'CVE-2025-6478 record', hint: 'cve.org', icon: 'i-bug', run: () => openTab('https://www.cve.org/CVERecord?id=CVE-2025-6478') },
+            { group: 'Links', label: 'LinkedIn', hint: 'linkedin.com', icon: 'i-linkedin-logo', run: () => openTab('https://www.linkedin.com/in/yousuf-nihal-8816121a6/') },
+            { group: 'Links', label: 'GitHub', hint: 'github.com', icon: 'i-github-logo', run: () => openTab('https://github.com/yousufnihal') },
+            { group: 'Links', label: 'Medium writeups', hint: 'medium.com', icon: 'i-medium-logo', run: () => openTab('https://medium.com/@yousufnihal') },
+            ...certs.map(cert => ({
+                group: 'Certifications',
+                label: cert.querySelector('strong').textContent,
+                hint: cert.querySelector('.cert-meta').textContent,
+                icon: 'i-seal-check',
+                run: () => cert.querySelector('a').click()
+            }))
+        ];
+
+        const svgNS = 'http://www.w3.org/2000/svg';
+        let results = [];
+        let active = 0;
+
+        const setActive = (i, scroll = true) => {
+            active = i;
+            const options = paletteList.querySelectorAll('[role="option"]');
+            options.forEach((el, k) => el.setAttribute('aria-selected', String(k === i)));
+            const current = options[i];
+            if (current) {
+                paletteInput.setAttribute('aria-activedescendant', current.id);
+                if (scroll) current.scrollIntoView({ block: 'nearest' });
+            } else {
+                paletteInput.removeAttribute('aria-activedescendant');
+            }
+        };
+
+        const runItem = (i) => {
+            const item = results[i];
+            if (!item) return;
+            palette.close();
+            item.run();
+        };
+
+        // Every term must appear somewhere in the label, hint or group
+        const render = () => {
+            const terms = paletteInput.value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+            results = items.filter(item => {
+                const haystack = `${item.label} ${item.hint} ${item.group}`.toLowerCase();
+                return terms.every(term => haystack.includes(term));
+            });
+
+            paletteList.textContent = '';
+            let lastGroup = '';
+            results.forEach((item, i) => {
+                if (item.group !== lastGroup) {
+                    lastGroup = item.group;
+                    const heading = document.createElement('li');
+                    heading.className = 'palette-group';
+                    heading.setAttribute('role', 'presentation');
+                    heading.textContent = item.group;
+                    paletteList.append(heading);
+                }
+
+                const option = document.createElement('li');
+                option.className = 'palette-item';
+                option.id = `pal-${i}`;
+                option.setAttribute('role', 'option');
+
+                const svg = document.createElementNS(svgNS, 'svg');
+                svg.setAttribute('class', 'i');
+                svg.setAttribute('aria-hidden', 'true');
+                const use = document.createElementNS(svgNS, 'use');
+                use.setAttribute('href', `#${item.icon}`);
+                svg.append(use);
+
+                const label = document.createElement('span');
+                label.className = 'palette-label';
+                label.textContent = item.label;
+                const hint = document.createElement('span');
+                hint.className = 'palette-hint';
+                hint.textContent = item.hint;
+
+                option.append(svg, label, hint);
+                option.addEventListener('click', () => runItem(i));
+                option.addEventListener('pointermove', () => {
+                    if (active !== i) setActive(i, false);
+                });
+                paletteList.append(option);
+            });
+
+            if (!results.length) {
+                const empty = document.createElement('li');
+                empty.className = 'palette-empty';
+                empty.setAttribute('role', 'presentation');
+                empty.textContent = 'command not found. Try "certs", "email" or "contact".';
+                paletteList.append(empty);
+            }
+
+            setActive(0);
+        };
+
+        const openPalette = () => {
+            if (palette.open) return;
+            if (menu && menu.open) menu.close();
+            paletteInput.value = '';
+            render();
+            palette.showModal();
+            paletteInput.focus();
+        };
+
+        paletteInput.addEventListener('input', render);
+        paletteInput.addEventListener('keydown', (e) => {
+            if (!results.length) return;
+            if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                e.preventDefault();
+                const step = e.key === 'ArrowDown' ? 1 : -1;
+                setActive((active + step + results.length) % results.length);
+            } else if (e.key === 'Enter') {
+                e.preventDefault();
+                runItem(active);
+            }
+        });
+
+        if (paletteOpen) paletteOpen.addEventListener('click', openPalette);
+        if (paletteClose) paletteClose.addEventListener('click', () => palette.close());
+        closeOnBackdrop(palette);
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) {
+                e.preventDefault();
+                if (palette.open) palette.close();
+                else if (!document.querySelector('dialog[open]')) openPalette();
+                return;
+            }
+            const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) || document.activeElement.isContentEditable;
+            if (e.key === '/' && !typing && !document.querySelector('dialog[open]')) {
+                e.preventDefault();
+                openPalette();
+            }
+        });
+    }
+
+    /* ---------- Status line: scroll position and clock ---------- */
+
+    const slPct = document.getElementById('sl-pct');
+    const slClock = document.getElementById('sl-clock');
+    const statusWide = window.matchMedia('(min-width: 1024px)');
+
+    if (slPct && slClock) {
+        let slTicking = false;
+        const syncStatus = () => {
+            slTicking = false;
+            const max = document.documentElement.scrollHeight - window.innerHeight;
+            const pct = max > 0 ? Math.round((window.scrollY / max) * 100) : 0;
+            slPct.textContent = pct <= 0 ? 'TOP' : pct >= 100 ? 'BOT' : `${pct}%`;
+            if (slPath && window.scrollY < window.innerHeight * 0.4) slPath.textContent = '~';
+        };
+        window.addEventListener('scroll', () => {
+            if (slTicking) return;
+            slTicking = true;
+            requestAnimationFrame(syncStatus);
+        }, { passive: true });
+        syncStatus();
+
+        const tickClock = () => {
+            if (statusWide.matches && !document.hidden) {
+                slClock.textContent = new Date().toLocaleTimeString([], { hour12: false });
+            }
+        };
+        tickClock();
+        setInterval(tickClock, 1000);
     }
 
     requestUpdate();

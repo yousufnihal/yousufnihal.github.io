@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="900" viewBox="0 0 720 900">
+  <!-- Decorative network-infrastructure map for the light sections.
+       Static links and nodes; dashes flow slowly along a few links ("data"). -->
+  <style>
+    .link { fill: none; stroke: #0f1b2d; stroke-opacity: .075; stroke-width: 1.2; }
+    .flow { fill: none; stroke: #0b7a6b; stroke-opacity: .38; stroke-width: 1.6; stroke-linecap: round; stroke-dasharray: 2 26; animation: flow 6s linear infinite; }
+    .flow.b { stroke: #2563eb; stroke-opacity: .3; animation-duration: 8s; animation-direction: reverse; }
+    .flow.c { animation-duration: 10s; }
+    .node { fill: #0f1b2d; fill-opacity: .14; }
+    .hub { fill: #ffffff; stroke: #0b7a6b; stroke-opacity: .3; stroke-width: 1.4; }
+    .hub.b { stroke: #2563eb; stroke-opacity: .28; }
+    .ring { fill: none; stroke: #0b7a6b; stroke-opacity: .12; }
+    .label { font: 10px ui-monospace, Consolas, monospace; fill: #0f1b2d; fill-opacity: .14; }
+    @keyframes flow { to { stroke-dashoffset: -280; } }
+    @media (prefers-reduced-motion: reduce) { .flow { animation: none; } }
+  </style>
+
+  <g>
+    <path class="link" d="M120 90 L300 160 L470 110 L640 190"/>
+    <path class="link" d="M300 160 L260 330 L430 380 L600 330"/>
+    <path class="link" d="M470 110 L430 380"/>
+    <path class="link" d="M640 190 L600 330 L650 520"/>
+    <path class="link" d="M260 330 L150 470 L300 590 L470 560"/>
+    <path class="link" d="M430 380 L470 560 L650 520"/>
+    <path class="link" d="M150 470 L90 660 L250 760 L420 720"/>
+    <path class="link" d="M300 590 L250 760"/>
+    <path class="link" d="M470 560 L420 720 L600 790"/>
+    <path class="link" d="M650 520 L600 790"/>
+  </g>
+
+  <g>
+    <path class="flow" d="M120 90 L300 160 L470 110 L640 190 L600 330"/>
+    <path class="flow b" d="M300 160 L260 330 L430 380 L470 560 L650 520"/>
+    <path class="flow c" d="M260 330 L150 470 L300 590 L250 760 L420 720 L600 790"/>
+  </g>
+
+  <g>
+    <circle class="node" cx="120" cy="90" r="3.5"/>
+    <circle class="node" cx="470" cy="110" r="3.5"/>
+    <circle class="node" cx="640" cy="190" r="3.5"/>
+    <circle class="node" cx="150" cy="470" r="3.5"/>
+    <circle class="node" cx="300" cy="590" r="3.5"/>
+    <circle class="node" cx="90" cy="660" r="3.5"/>
+    <circle class="node" cx="250" cy="760" r="3.5"/>
+    <circle class="node" cx="600" cy="790" r="3.5"/>
+    <circle class="node" cx="420" cy="720" r="3.5"/>
+
+    <circle class="ring" cx="300" cy="160" r="14"/>
+    <circle class="hub" cx="300" cy="160" r="6"/>
+    <circle class="hub b" cx="430" cy="380" r="6"/>
+    <circle class="ring" cx="600" cy="330" r="14"/>
+    <circle class="hub" cx="600" cy="330" r="6"/>
+    <circle class="hub b" cx="260" cy="330" r="6"/>
+    <circle class="hub" cx="470" cy="560" r="6"/>
+    <circle class="hub b" cx="650" cy="520" r="6"/>
+  </g>
+
+  <g>
+    <text class="label" x="314" y="150">10.0.4.12</text>
+    <text class="label" x="444" y="372">api-gw</text>
+    <text class="label" x="614" y="322">db-01</text>
+    <text class="label" x="484" y="552">vault</text>
+  </g>
+</svg>

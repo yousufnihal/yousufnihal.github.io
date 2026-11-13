@@ -742,13 +742,26 @@
         lastFrame = now;
         draw(now);
     };
+    // The scene only shows through the dark bookends (hero, contact, footer);
+    // while the light sections cover it, nothing is drawn at all
+    const windows = new Set();
     const sync = () => {
         cancelAnimationFrame(frame);
-        if (!document.hidden) {
+        if (!document.hidden && windows.size) {
             last = performance.now();
             frame = requestAnimationFrame(loop);
         }
     };
+    const watcher = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) windows.add(entry.target);
+            else windows.delete(entry.target);
+        });
+        sync();
+    });
+    ['.hero', '#contact', '.footer'].forEach(selector => {
+        const el = document.querySelector(selector);
+        if (el) watcher.observe(el);
+    });
     document.addEventListener('visibilitychange', sync);
-    sync();
 })();

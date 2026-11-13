@@ -89,7 +89,7 @@ body::before {
 
 body::after {
     z-index: 250;
-    opacity: 0.045;
+    opacity: 0.03;
     background-image: url('assets/grain.svg');
     background-size: 220px 220px;
 }
@@ -3262,3 +3262,143 @@ kbd {
     }
 }
 
+/* ==========================================================================
+   Hybrid theme: the dark workstation scene bookends the page (hero, contact,
+   footer); everything in between sits on a light "blueprint" surface with
+   navy text, deep teal + electric blue accents and faint network line art.
+   Tokens are redefined on the light sections, so every component adapts.
+   ========================================================================== */
+
+main > .sec:not(.contact) {
+    /* Light tokens (text colours checked for WCAG AA on #F4F7FB) */
+    --black: #f4f7fb;
+    --charcoal: #ffffff;
+    --surface: rgba(15, 27, 45, 0.03);
+    --fg: #0f1b2d;
+    --fg-2: #3e4c63;
+    --fg-3: #5b6a80;
+    --line: rgba(15, 27, 45, 0.1);
+    --line-strong: rgba(15, 27, 45, 0.18);
+    --neon-rgb: 11, 122, 107;
+    --neon: rgb(var(--neon-rgb));
+    --neon-soft: rgba(var(--neon-rgb), 0.08);
+    --neon-line: rgba(var(--neon-rgb), 0.35);
+    --glow: none;
+    --blue-rgb: 37, 99, 235;
+    --blue: rgb(var(--blue-rgb));
+    --critical: #b91c1c;
+    --high: #b45309;
+
+    color: var(--fg);
+    background:
+        url('assets/netmap.svg') right -220px top 40px / min(720px, 70vw) auto no-repeat,
+        radial-gradient(rgba(15, 27, 45, 0.06) 1px, transparent 1.3px) 0 0 / 22px 22px,
+        #f4f7fb;
+    padding-bottom: var(--sec-space);
+}
+
+/* Alternate the line art left/right and tint every other band slightly cooler */
+main > .sec:not(.contact):nth-of-type(even) {
+    background:
+        url('assets/netmap.svg') left -320px top 60px / min(720px, 70vw) auto no-repeat,
+        radial-gradient(rgba(15, 27, 45, 0.06) 1px, transparent 1.3px) 0 0 / 22px 22px,
+        #eef3f9;
+}
+
+/* Clean seams where the dark scene hands over to the light body and back */
+#about {
+    box-shadow: 0 -1px 0 rgba(var(--neon-rgb), 0.35);
+}
+
+main > .sec:not(.contact) + .contact {
+    box-shadow: 0 -1px 0 rgba(61, 220, 151, 0.3);
+}
+
+/* Glow belongs to the dark scene; on light surfaces things stay crisp */
+main > .sec:not(.contact) .title em,
+main > .sec:not(.contact) .tile .tile-big {
+    text-shadow: none;
+}
+
+main > .sec:not(.contact) .tl-year {
+    filter: none;
+}
+
+main > .sec:not(.contact) .skill.is-open .skill-icon {
+    filter: none;
+}
+
+main > .sec:not(.contact) .btn-primary {
+    color: #ffffff;
+    box-shadow: 0 8px 24px -10px rgba(var(--neon-rgb), 0.6);
+}
+
+main > .sec:not(.contact) .cert img {
+    filter: none;
+}
+
+/* Cards: white with soft, cool shadows */
+main > .sec:not(.contact) .tile,
+main > .sec:not(.contact) .cert-pane {
+    box-shadow: 0 1px 2px rgba(15, 27, 45, 0.04), 0 12px 32px -16px rgba(15, 27, 45, 0.18);
+}
+
+main > .sec:not(.contact) .cert-img {
+    box-shadow: 0 1px 2px rgba(15, 27, 45, 0.06), 0 8px 20px -12px rgba(15, 27, 45, 0.25);
+}
+
+/* The terminal and the Hack The Box card stay dark: contrast pieces on the light page */
+main > .sec:not(.contact) .terminal,
+main > .sec:not(.contact) .tile-htb {
+    --fg: #e9eeec;
+    --fg-2: #9ca8a3;
+    --fg-3: #7a8682;
+    --line: rgba(200, 225, 215, 0.1);
+    --line-strong: rgba(200, 225, 215, 0.18);
+    --charcoal: #0b0e10;
+    --neon-rgb: 61, 220, 151;
+    --neon: rgb(var(--neon-rgb));
+    --neon-line: rgba(var(--neon-rgb), 0.32);
+    --blue-rgb: 110, 168, 255;
+    --blue: rgb(var(--blue-rgb));
+    color: var(--fg);
+    box-shadow: 0 30px 70px -30px rgba(15, 27, 45, 0.55);
+}
+
+@media (hover: hover) {
+    main > .sec:not(.contact) .btn-primary:hover {
+        background: #09695c;
+    }
+
+    main > .sec:not(.contact) .tile:hover {
+        border-color: rgba(var(--neon-rgb), 0.3);
+    }
+}
+
+/* Phones: lighter line art so it never sits behind text at full strength */
+@media (max-width: 767px) {
+    main > .sec:not(.contact),
+    main > .sec:not(.contact):nth-of-type(even) {
+        background-size: 420px auto, 22px 22px, auto;
+        background-position: right -220px top 20px, 0 0, 0 0;
+    }
+}
+
+/* The top bar stays a solid dark strip so it reads cleanly over light sections */
+@media (min-width: 1024px) {
+    .topbar.is-scrolled {
+        background: rgba(8, 11, 14, 0.94);
+    }
+}
+
+
+/* Keep the footer's "Back to top" clear of the fixed sound toggle */
+.footer-row {
+    padding-right: 60px;
+}
+
+@media (min-width: 1024px) {
+    .footer-row {
+        padding-right: 150px;
+    }
+}
